@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://Pranav:123@db:5432/vault_ledger"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: Pranav
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: vault_ledger
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U Pranav -d vault_ledger"]
+      interval: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
