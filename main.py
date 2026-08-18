@@ -7,8 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from schemas import paymentsrequest,paymentsresponse
 
 # Database and Model Imports
-from database import engine,get_session
-from models import Transaction,Base
+from database import engine, Base,get_session
+from models import Transaction
 
 # --- Machine Learning Placeholder Logic ---
 # In a real setup, you would load your saved scikit-learn model here:
@@ -47,7 +47,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 # --- 1. THE ASYNC PAYMENT PATHWAY (I/O Bound) ---
-@app.post("/payments")
+@app.post("/payments",response_model=paymentsresponse)
 async def create_transaction(
     payload : paymentsrequest,
     idempotency_key: Annotated[str, Header()],
