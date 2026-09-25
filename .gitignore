@@ -1,12 +1,6 @@
- Virtual Environment
-env/
-venv/
-ENV/
-
-# Environment Variables
+# Python virtual environment
+.venv/
 .env
-
-# Python cache
 __pycache__/
-*.py[cod]
-*$py.class
+data/generated/
+ data/processed/

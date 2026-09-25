@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vault-api"
+version = "1.0.0"
+description = "Idempotent distributed payment API with merchant churn intelligence"
+requires-python = ">=3.12"
+dependencies = [
+    "sqlalchemy>=2.0",
+    "alembic",
+    "pydantic-settings",
+    "psycopg[binary]>=3.1",
+]
+
+[project.optional-dependencies]
+api = [
+    "fastapi",
+    "uvicorn[standard]",
+    "asyncpg",
+    "redis",
+]
+ml = [
+    "pandas",
+    "numpy",
+    "pyarrow",
+    "scikit-learn",
+    "xgboost",
+    "shap",
+]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "httpx",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*", "ml*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

@@ -1,0 +1,25 @@
+Metadata-Version: 2.4
+Name: vault-api
+Version: 1.0.0
+Summary: Idempotent distributed payment API with merchant churn intelligence
+Requires-Python: >=3.12
+Requires-Dist: sqlalchemy>=2.0
+Requires-Dist: alembic
+Requires-Dist: pydantic-settings
+Requires-Dist: psycopg[binary]>=3.1
+Provides-Extra: api
+Requires-Dist: fastapi; extra == "api"
+Requires-Dist: uvicorn[standard]; extra == "api"
+Requires-Dist: asyncpg; extra == "api"
+Requires-Dist: redis; extra == "api"
+Provides-Extra: ml
+Requires-Dist: pandas; extra == "ml"
+Requires-Dist: numpy; extra == "ml"
+Requires-Dist: pyarrow; extra == "ml"
+Requires-Dist: scikit-learn; extra == "ml"
+Requires-Dist: xgboost; extra == "ml"
+Requires-Dist: shap; extra == "ml"
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-asyncio; extra == "dev"
+Requires-Dist: httpx; extra == "dev"
