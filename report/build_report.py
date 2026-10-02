@@ -32,7 +32,14 @@ ROOT = Path(__file__).resolve().parent
 TEMPLATE = ROOT / "_template.docx"
 OUT = ROOT / "vault_api_PBL_report.docx"
 PAGEMAP = ROOT / ".pagemap.json"
-ARCH_PNG = ROOT / "fig_4_1_architecture.png"
+# Figures drawn from the README and the spec rather than left as placeholders:
+# they describe the design, not any measured result. (png, width in inches)
+DRAWN = {
+    "4.1": ("fig_4_1_architecture.png", 5.2),
+    "4.2": ("fig_4_2_payment_flow.png", 5.4),
+    "4.3": ("fig_4_3_temporal.png", 5.9),
+    "4.4": ("fig_4_4_one_event.png", 5.9),
+}
 
 TEXT_WIDTH = Inches(6.05)
 DRAFT_STYLE = "DraftValue"
@@ -1153,29 +1160,29 @@ ABBREVIATIONS = [
 ]
 
 # Figure placeholders: (number, caption, description, height_cm)
+# num -> (title, what it shows, box height in cm). Entries listed in DRAWN are
+# rendered diagrams and ignore the height; the rest are empty framed boxes.
 FIGURES = {
     "4.2": ("Idempotent POST /payments Request Flow",
-            "Flowchart of the README request flow, top to bottom: validate body and "
-            "Idempotency-Key; compute request fingerprint; check PostgreSQL for a completed "
-            "record, branching to 'replay stored result' on a fingerprint match and to '409 "
-            "Conflict' on a mismatch; otherwise acquire the Redis lock, recheck the database, open "
-            "the atomic transaction that creates the payment and stores the idempotency result, "
-            "commit, release the owned lock and return. Mark the two PostgreSQL checks and the "
-            "unique constraint so a reader can see the database, not the lock, is the authority.",
+            "Flowchart of the README request flow: validate body and Idempotency-Key, compute "
+            "the request fingerprint, check PostgreSQL for a completed record (replay on a "
+            "fingerprint match, 409 on a mismatch), acquire the Redis lock, recheck the "
+            "database, commit the payment and idempotency record in one transaction, release "
+            "the lock. The two database checks and the unique constraint are annotated so the "
+            "reader can see the database, not the lock, is the authority.",
             12.0),
     "4.3": ("Temporal Formulation on One Merchant Timeline",
-            "A single horizontal merchant timeline with payment attempts drawn as ticks. Mark one "
-            "snapshot t, shade the 90-day observation window to its left and the 60-day prediction "
-            "horizon to its right, and show the weekly cadence with several further snapshots "
-            "stepping forward by 7 days. The reader should see that features come only from the "
-            "left of t and the label only from the right of it.",
+            "One merchant timeline with payment attempts as ticks and failures marked. "
+            "Snapshot t is marked, with the 90-day observation window shaded to its left and "
+            "the 60-day prediction horizon to its right, so features come only from the left "
+            "of t and the label only from the right. Three stacked rows below show the same "
+            "construction repeating every 7 days.",
             7.0),
     "4.4": ("Twenty HTTP Requests Resolving to One ML Event",
-            "Three stacked bands: 20 duplicate HTTP requests at the top, funnelling through an "
-            "idempotency-handling layer into a single logical payment row, and from there into a "
-            "single behavioural event visible to the feature pipeline. Alongside it, the "
-            "unprotected case: the same 20 requests producing 17 rows and therefore 17 inflated "
-            "events. Contrast between the two columns is the point.",
+            "Two columns. Without idempotency, 20 duplicate requests reach three stateless "
+            "workers and commit 17 payment rows, inflating tx_count_30d 17-fold. With the "
+            "Redis lock and the PostgreSQL unique constraint, the same 20 requests commit one "
+            "payment row and produce one behavioural event.",
             7.0),
     "5.1": ("Swagger Interactive API Documentation at /docs",
             "Screenshot of the FastAPI Swagger page at /docs with every route group expanded: "
@@ -1184,50 +1191,51 @@ FIGURES = {
             "show the load balancer rather than a single worker.",
             12.0),
     "5.2": ("Churn-Risk Endpoint Response for a High-Risk Merchant",
-            "Screenshot of the JSON response body from GET /merchants/{merchant_id}/churn-risk for "
-            "a merchant the model scores as high risk, showing merchant_id, snapshot_at, "
-            "churn_score, risk_band HIGH, predicted_churn true, the top_factors list with feature "
-            "names and directions, and model_version.",
+            "Screenshot of the JSON response body from GET /merchants/{merchant_id}/churn-risk "
+            "for a merchant the model scores as high risk, showing merchant_id, snapshot_at, "
+            "churn_score, risk_band HIGH, predicted_churn true, the top_factors list with "
+            "feature names and directions, and model_version.",
             7.0),
     "5.3": ("Churn-Risk Dashboard — High-Risk Merchant",
-            "Screenshot of the demonstration dashboard for the same high-risk merchant: the churn "
-            "score and risk band, the merchant's recent payment activity, and the top contributing "
-            "factors with their direction of effect. Capture the state where the risk band reads "
-            "HIGH.",
+            "Screenshot of the demonstration dashboard for the same high-risk merchant: the "
+            "churn score and risk band, the merchant's recent payment activity, and the top "
+            "contributing factors with their direction of effect. Capture the state where the "
+            "risk band reads HIGH.",
             12.0),
     "5.4": ("Churn-Risk Dashboard — Low-Risk Merchant",
-            "The same dashboard screen captured for a merchant with steady recent activity, so the "
-            "score, the risk band and the top factors can be compared directly against Figure 5.3.",
+            "The same dashboard screen captured for a merchant with steady recent activity, so "
+            "the score, the risk band and the top factors can be compared directly against "
+            "Figure 5.3.",
             12.0),
     "6.1": ("Class Balance Across the Chronological Splits",
             "Grouped bar chart, one group per split (train, validation, test), showing positive "
             "and negative snapshot counts on a log scale, with the positive rate printed above "
-            "each group. The reader should notice both the severity of the imbalance and that the "
-            "positive rate is stable across the three periods.",
+            "each group. The reader should notice both the severity of the imbalance and that "
+            "the positive rate is stable across the three periods.",
             7.0),
     "6.2": ("Precision–Recall Curves for Models A–D",
-            "Precision–recall curves for all four models on the test split: recall on the x-axis, "
-            "precision on the y-axis, one line per model with PR-AUC in the legend, and a "
-            "horizontal dashed line at the 0.039 positive-rate baseline. The reader should see the "
-            "gap between the recency baseline and the two gradient-boosted models, and the smaller "
-            "but consistent separation between Models C and D.",
+            "Precision–recall curves for all four models on the test split: recall on the "
+            "x-axis, precision on the y-axis, one line per model with PR-AUC in the legend, and "
+            "a horizontal dashed line at the 0.039 positive-rate baseline. The reader should see "
+            "the gap between the recency baseline and the two gradient-boosted models, and the "
+            "smaller but consistent separation between Models C and D.",
             7.0),
     "6.3": ("Confusion Matrix for Model D at the Frozen Threshold",
-            "A 2×2 confusion matrix heatmap for Model D on the test split at threshold 0.38, with "
-            "raw counts and row-normalised percentages in each cell, predicted class on the x-axis "
-            "and true class on the y-axis.",
+            "A 2×2 confusion matrix heatmap for Model D on the test split at threshold 0.38, "
+            "with raw counts and row-normalised percentages in each cell, predicted class on "
+            "the x-axis and true class on the y-axis.",
             7.0),
     "6.4": ("SHAP Summary (Beeswarm) for Model D",
-            "SHAP beeswarm over the test split, features ordered by mean absolute SHAP value, one "
-            "point per snapshot coloured by feature value. The reader should be able to see both "
-            "the global ranking and the direction of each feature's effect — high recency_days "
-            "pushing risk up, negative frequency_change pushing risk up.",
+            "SHAP beeswarm over the test split, features ordered by mean absolute SHAP value, "
+            "one point per snapshot coloured by feature value. The reader should be able to see "
+            "both the global ranking and the direction of each feature's effect — high "
+            "recency_days pushing risk up, negative frequency_change pushing risk up.",
             7.0),
     "6.5": ("SHAP Waterfall for One High-Risk Merchant",
-            "SHAP waterfall plot for a single high-risk test snapshot, from the base value to the "
-            "final score, showing each feature's signed contribution. Use the same merchant as "
-            "Figures 5.2 and 5.3 so the explanation in the API response can be traced back to this "
-            "plot.",
+            "SHAP waterfall plot for a single high-risk test snapshot, from the base value to "
+            "the final score, showing each feature's signed contribution. Use the same merchant "
+            "as Figures 5.2 and 5.3 so the explanation in the API response can be traced back "
+            "to this plot.",
             7.0),
     "6.6": ("Pytest Report — 38 of 38 Tests Passing",
             "Terminal capture of the full pytest run with -v, showing the unit, integration, "
@@ -1235,9 +1243,9 @@ FIGURES = {
             7.0),
     "6.7": ("Concurrency Test Output With and Without Idempotency",
             "Side-by-side terminal capture of the stress test: the unprotected run reporting 20 "
-            "requests and 17 committed payment rows, and the protected run reporting 50 requests, "
-            "1 payment row and 1 idempotency record with the 201 / replay / 409 breakdown. The "
-            "contrast between the two row counts is the headline.",
+            "requests and 17 committed payment rows, and the protected run reporting 50 "
+            "requests, 1 payment row and 1 idempotency record with the 201 / replay / 409 "
+            "breakdown. The contrast between the two row counts is the headline.",
             7.0),
 }
 
@@ -1483,7 +1491,8 @@ def build():
              "Client → Nginx → three stateless FastAPI workers → Redis coordination and PostgreSQL "
              "ledger → Feature Generation → XGBoost → SHAP and Churn-Risk API")
     clear_runs(P[233])
-    P[233].add_run().add_picture(str(ARCH_PNG), width=Inches(5.9))
+    P[233].add_run().add_picture(str(ROOT / DRAWN["4.1"][0]),
+                                 width=Inches(DRAWN["4.1"][1]))
     set_text(P[234], "Figure 4.1  Target System Architecture of vault-api")
     set_text(P[235], C4_ARCH[0])
     c = Cur(P[235])
@@ -1712,12 +1721,21 @@ def finish_tables(doc):
 
 
 def add_figure(doc, cur: Cur, caption_donor: Paragraph, num: str):
-    """Insert an empty framed figure box, captioned, at the cursor."""
+    """Insert a figure at the cursor — the drawn diagram if we have one, else a box."""
     title, desc, h = FIGURES[num]
-    box = figure_box(doc, desc, f"Figure {num}  {title}", caption_donor, h)
+    caption = f"Figure {num}  {title}"
+    if num in DRAWN:
+        png, width = DRAWN[num]
+        p = clear_runs(cur.para(caption_donor, ""))
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.paragraph_format.keep_with_next = True
+        p.add_run().add_picture(str(ROOT / png), width=Inches(width))
+        cur.para(caption_donor, caption)
+        return
+    box = figure_box(doc, desc, caption, caption_donor, h)
     cur.raw(box._tbl)
-    # a table may not be the last element before another table in LibreOffice
-    # without an empty paragraph between, or the two boxes merge visually
+    # a table may not sit directly against another table in LibreOffice without
+    # an empty paragraph between, or the two boxes merge visually
     cur.para(caption_donor, "")
 
 

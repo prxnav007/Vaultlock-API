@@ -186,16 +186,36 @@ def main():
     w("- The template's CrypteX screenshots (Figures 4.1, 5.1–5.3, 6.1) were removed. The four "
       "institutional logos and the Vision / Mission / PEO / PO / PSO pages are untouched.")
     w("")
-    w("## Figure boxes to replace")
+    w("## Figures")
     w("")
-    w(f"Figure 4.1 is a real rendered diagram (`report/make_fig41.py` → "
-      f"`report/fig_4_1_architecture.png`). The other **{len(br.FIGURES)}** are empty framed "
-      f"boxes describing what must go in them.")
+    drawn = [n for n in ["4.1"] + list(br.FIGURES) if n in br.DRAWN]
+    boxes = [n for n in br.FIGURES if n not in br.DRAWN]
+    w(f"**{len(drawn)} are finished diagrams** and **{len(boxes)} are empty framed boxes.** "
+      f"The drawn ones describe the design rather than a measured result, so they are built "
+      f"from `README.md` and `PROJECT_SPEC.md` and will not need replacing when the pipeline "
+      f"runs. Regenerate them with `python report/make_diagrams.py`.")
+    w("")
+    w("| Figure | Title | Source |")
+    w("|---|---|---|")
+    w("| 4.1 | Target System Architecture of vault-api | `make_diagrams.py` → "
+      "`fig_4_1_architecture.png` |")
+    for n in drawn:
+        if n == "4.1":
+            continue
+        w(f"| {n} | {br.FIGURES[n][0]} | `make_diagrams.py` → `{br.DRAWN[n][0]}` |")
+    w("")
+    w("Figure 4.4 is the one diagram carrying a draft number: the **17 duplicate rows from 20 "
+      "requests**. It must be kept in step with Table 6.4 and the Abstract — edit `fig_4_4()` "
+      "in `make_diagrams.py` when the real stress-test figure is known.")
+    w("")
+    w("The remaining boxes all need a running system: six screenshots or terminal captures, "
+      "and five charts that need real model output.")
     w("")
     w("| Figure | Title | Box height | What it must show |")
     w("|---|---|---|---|")
-    for num, (title, desc, h) in br.FIGURES.items():
-        w(f"| {num} | {title} | {h:g} cm | {desc} |")
+    for n in boxes:
+        title, desc, h = br.FIGURES[n]
+        w(f"| {n} | {title} | {h:g} cm | {desc} |")
     w("")
     w("## Draft code listings (Section 5.2)")
     w("")

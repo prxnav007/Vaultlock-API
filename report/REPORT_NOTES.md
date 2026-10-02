@@ -42,15 +42,23 @@ Two points worth confirming with the supervisor:
 - Keep-with-next cleared on code listing lines; the template's listings are short enough to carry it on every line, ours are not and whole listings were being pushed to the next page.
 - The template's CrypteX screenshots (Figures 4.1, 5.1–5.3, 6.1) were removed. The four institutional logos and the Vision / Mission / PEO / PO / PSO pages are untouched.
 
-## Figure boxes to replace
+## Figures
 
-Figure 4.1 is a real rendered diagram (`report/make_fig41.py` → `report/fig_4_1_architecture.png`). The other **14** are empty framed boxes describing what must go in them.
+**4 are finished diagrams** and **11 are empty framed boxes.** The drawn ones describe the design rather than a measured result, so they are built from `README.md` and `PROJECT_SPEC.md` and will not need replacing when the pipeline runs. Regenerate them with `python report/make_diagrams.py`.
+
+| Figure | Title | Source |
+|---|---|---|
+| 4.1 | Target System Architecture of vault-api | `make_diagrams.py` → `fig_4_1_architecture.png` |
+| 4.2 | Idempotent POST /payments Request Flow | `make_diagrams.py` → `fig_4_2_payment_flow.png` |
+| 4.3 | Temporal Formulation on One Merchant Timeline | `make_diagrams.py` → `fig_4_3_temporal.png` |
+| 4.4 | Twenty HTTP Requests Resolving to One ML Event | `make_diagrams.py` → `fig_4_4_one_event.png` |
+
+Figure 4.4 is the one diagram carrying a draft number: the **17 duplicate rows from 20 requests**. It must be kept in step with Table 6.4 and the Abstract — edit `fig_4_4()` in `make_diagrams.py` when the real stress-test figure is known.
+
+The remaining boxes all need a running system: six screenshots or terminal captures, and five charts that need real model output.
 
 | Figure | Title | Box height | What it must show |
 |---|---|---|---|
-| 4.2 | Idempotent POST /payments Request Flow | 12 cm | Flowchart of the README request flow, top to bottom: validate body and Idempotency-Key; compute request fingerprint; check PostgreSQL for a completed record, branching to 'replay stored result' on a fingerprint match and to '409 Conflict' on a mismatch; otherwise acquire the Redis lock, recheck the database, open the atomic transaction that creates the payment and stores the idempotency result, commit, release the owned lock and return. Mark the two PostgreSQL checks and the unique constraint so a reader can see the database, not the lock, is the authority. |
-| 4.3 | Temporal Formulation on One Merchant Timeline | 7 cm | A single horizontal merchant timeline with payment attempts drawn as ticks. Mark one snapshot t, shade the 90-day observation window to its left and the 60-day prediction horizon to its right, and show the weekly cadence with several further snapshots stepping forward by 7 days. The reader should see that features come only from the left of t and the label only from the right of it. |
-| 4.4 | Twenty HTTP Requests Resolving to One ML Event | 7 cm | Three stacked bands: 20 duplicate HTTP requests at the top, funnelling through an idempotency-handling layer into a single logical payment row, and from there into a single behavioural event visible to the feature pipeline. Alongside it, the unprotected case: the same 20 requests producing 17 rows and therefore 17 inflated events. Contrast between the two columns is the point. |
 | 5.1 | Swagger Interactive API Documentation at /docs | 12 cm | Screenshot of the FastAPI Swagger page at /docs with every route group expanded: POST and GET /merchants, POST and GET /payments, GET /health and GET /merchants/{merchant_id}/churn-risk. Capture it through Nginx so the host and port show the load balancer rather than a single worker. |
 | 5.2 | Churn-Risk Endpoint Response for a High-Risk Merchant | 7 cm | Screenshot of the JSON response body from GET /merchants/{merchant_id}/churn-risk for a merchant the model scores as high risk, showing merchant_id, snapshot_at, churn_score, risk_band HIGH, predicted_churn true, the top_factors list with feature names and directions, and model_version. |
 | 5.3 | Churn-Risk Dashboard — High-Risk Merchant | 12 cm | Screenshot of the demonstration dashboard for the same high-risk merchant: the churn score and risk band, the merchant's recent payment activity, and the top contributing factors with their direction of effect. Capture the state where the risk band reads HIGH. |
@@ -92,7 +100,7 @@ The Mentor Remarks column is **invented**, written in the template's register to
 | 3.1 WEEKLY PBL PROGRESS LOG | Table 3.1  Weekly PBL Progress Log — row “8–10” | Race demonstration is convincing. Report the before-and-after together. | `Race demonstration is convincing. Report the before-and-after together.` | **Draft mentor remarks — to be confirmed with Dr. Thiyagarajan**; Work Done columns from git history |
 | 3.1 WEEKLY PBL PROGRESS LOG | Table 3.1  Weekly PBL Progress Log — row “11–12” | ran the resilience cases and the full suite, 38 of 38 tests passing. | `38 of 38` | **Draft mentor remarks — to be confirmed with Dr. Thiyagarajan**; Work Done columns from git history |
 | 3.1 WEEKLY PBL PROGRESS LOG | Table 3.1  Weekly PBL Progress Log — row “11–12” | Complete. Ready for final review. | `Complete. Ready for final review.` | **Draft mentor remarks — to be confirmed with Dr. Thiyagarajan**; Work Done columns from git history |
-| 4.5 TESTING AND EXECUTION | Figure 4.1 shows the target architecture. A client's request enters through Nginx, which distributes it across three stateless FastAPI workers. The workers hold no shared process memory, which is precisely why an in-process lock would be useless and why the coordination and correctness responsibilities are pushed outward: Redis holds short-lived lock leases, and PostgreSQL holds the durable ledger and the constraints that protect it. Downstream of the ledger, and entirely outside the request path, feature generation turns committed payments into merchant × snapshot rows, XGBoost learns from them, and SHAP and the churn-risk endpoint consume the trained model. | Thirty-eight pytest tests cover the system in four groups. | `Thirty-eight` | `pytest -v` summary line |
+| 4.5 TESTING AND EXECUTION | Figure 4.4  Twenty HTTP Requests Resolving to One ML Event | Thirty-eight pytest tests cover the system in four groups. | `Thirty-eight` | `pytest -v` summary line |
 | 6.2 RESULTS AND MODEL COMPARISON | Table 6.1  Synthetic Dataset Statistics — row “Merchants” | 2,000 | `2,000` | `ml/synthetic/generate.py` run log → `data/generated/` row counts |
 | 6.2 RESULTS AND MODEL COMPARISON | Table 6.1  Synthetic Dataset Statistics — row “History covered” | 24 months (2024-07-01 to 2026-06-30) | `24 months (2024-07-01 to 2026-06-30)` | `ml/synthetic/generate.py` run log → `data/generated/` row counts |
 | 6.2 RESULTS AND MODEL COMPARISON | Table 6.1  Synthetic Dataset Statistics — row “Random seed” | 42 | `42` | `ml/synthetic/generate.py` run log → `data/generated/` row counts |
