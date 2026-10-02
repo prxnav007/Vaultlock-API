@@ -35,10 +35,19 @@ PAGEMAP = ROOT / ".pagemap.json"
 # Figures drawn from the README and the spec rather than left as placeholders:
 # they describe the design, not any measured result. (png, width in inches)
 DRAWN = {
-    "4.1": ("fig_4_1_architecture.png", 5.2),
-    "4.2": ("fig_4_2_payment_flow.png", 5.4),
-    "4.3": ("fig_4_3_temporal.png", 5.9),
-    "4.4": ("fig_4_4_one_event.png", 5.9),
+    "4.1": ("fig_architecture.png", 5.2),
+    "4.2": ("fig_payment_flow.png", 5.4),
+    "4.3": ("fig_schema.png", 5.2),
+    "4.4": ("fig_temporal.png", 5.9),
+    "4.5": ("fig_one_event.png", 5.9),
+    # Chapter 6 charts, rendered by make_charts.py from the DRAFT numbers in
+    # Tables 6.1-6.3. 6.1 and 6.3 only redraw values the tables already state;
+    # 6.2, 6.4 and 6.5 additionally invent a curve shape or a point cloud.
+    "6.1": ("fig_class_balance.png", 5.6),
+    "6.2": ("fig_pr_curves.png", 5.4),
+    "6.3": ("fig_confusion_matrix.png", 4.6),
+    "6.4": ("fig_shap_beeswarm.png", 5.7),
+    "6.5": ("fig_shap_waterfall.png", 5.7),
 }
 
 TEXT_WIDTH = Inches(6.05)
@@ -295,6 +304,15 @@ def _cell_borders(cell, colour="A6A6A6", sz="6"):
         e.set(qn("w:color"), colour)
         borders.append(e)
     tcPr.append(borders)
+
+
+def left_align(t: Table, cols):
+    """Left-align whole columns; cloned donor rows centre some of them."""
+    for row in t.rows:
+        for ci in cols:
+            if ci < len(row.cells):
+                for p in row.cells[ci].paragraphs:
+                    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
 
 def normalise_list_table(t: Table, bold_rows=None, indent_col=1):
@@ -651,7 +669,8 @@ C4_REFINE = [
     "deliberately separate from payments so that retry bookkeeping never pollutes the behavioural "
     "ledger the ML reads. It carries the merchant-scoped key, the request fingerprint, a "
     "PROCESSING or COMPLETED state, the resulting payment and the response to replay, under a "
-    "unique constraint on (merchant_id, idempotency_key).",
+    "unique constraint on (merchant_id, idempotency_key). Figure 4.3 sets out the three "
+    "tables together with the constraints that hold them in step.",
     "The churn problem was reformulated at the same time, and this was the larger change. Instead "
     "of a flag on a merchant row, one observation became a merchant at a point in time, generated "
     "every 7 days. Features look back over a 90-day observation window; the label looks forward "
@@ -662,9 +681,84 @@ C4_REFINE = [
     "merchants who have not already obviously left. Failed payments count as activity throughout: "
     "a merchant whose payments keep failing is experiencing friction, not absence, and treating "
     "failure as churn would have both mislabelled the data and destroyed the very question we "
-    "wanted to ask about reliability features. Figure 4.3 shows the construction on a single "
-    "merchant timeline, and Figure 4.4 shows why the idempotency work is a precondition for it.",
+    "wanted to ask about reliability features. Figure 4.4 shows the construction on a single "
+    "merchant timeline, and Figure 4.5 shows why the idempotency work is a precondition for it.",
 ]
+C4_FEATURES_TXT = (
+    "Table 4.1 lists the resulting feature schema in full. Every column is computed from "
+    "merchant.joined_at and the merchant's own payment rows, which is why changing the feature "
+    "set never touches the ledger. The last two columns record the ablation: Model C sees the "
+    "nine recency, frequency, monetary and tenure columns, and Model D adds the three "
+    "payment-reliability columns, so the difference between them in Chapter 6 isolates exactly "
+    "what reliability behaviour contributes. industry is stored on the merchant row but is "
+    "given to neither model, because the generator assigns it and feeding it back would create "
+    "an artificial shortcut to churn.")
+C4_FEATURES = [
+    ["Feature", "Definition at snapshot t", "C", "D"],
+    ["recency_days", "Days from the latest attempt at or before t to t", "✓", "✓"],
+    ["tx_count_30d", "Attempts in (t − 30 d, t]", "✓", "✓"],
+    ["tx_count_prev_30d", "Attempts in (t − 60 d, t − 30 d]", "✓", "✓"],
+    ["tx_count_90d", "Attempts in (t − 90 d, t]", "✓", "✓"],
+    ["frequency_change", "tx_count_30d − tx_count_prev_30d", "✓", "✓"],
+    ["avg_success_amount_30d", "Mean amount_minor of SUCCESS payments in (t − 30 d, t]",
+     "✓", "✓"],
+    ["avg_success_amount_prev_30d", "The same mean over (t − 60 d, t − 30 d]", "✓", "✓"],
+    ["monetary_change", "avg_success_amount_30d − avg_success_amount_prev_30d", "✓", "✓"],
+    ["failure_rate_30d", "FAILED ÷ (SUCCESS + FAILED) over (t − 30 d, t]", "—", "✓"],
+    ["failure_rate_prev_30d", "The same ratio over (t − 60 d, t − 30 d]", "—", "✓"],
+    ["failure_rate_change", "failure_rate_30d − failure_rate_prev_30d", "—", "✓"],
+    ["tenure_days", "t − merchant.joined_at", "✓", "✓"],
+    ["churn_next_60d", "Label: 1 if zero attempts in (t, t + 60 d]", "—", "—"],
+]
+
+C5_API_TXT = (
+    "Table 5.1 is the HTTP contract the modules above expose; {id} stands for the resource's "
+    "UUID path parameter. The payment endpoint is the only one that requires a header, and the "
+    "only one whose failure modes encode idempotency semantics rather than ordinary validation.")
+C5_API = [
+    ["Endpoint", "Purpose", "Success", "Failure"],
+    ["POST /merchants", "Create a merchant; joined_at is server-generated", "201 Created",
+     "422 invalid body"],
+    ["GET /merchants/{id}", "Merchant metadata", "200 OK", "404 unknown merchant"],
+    ["POST /payments",
+     "Create one logical payment. Requires Idempotency-Key; the fingerprint covers "
+     "merchant_id, amount_minor and currency",
+     "201 Created, or the stored status code and body on a legitimate replay",
+     "409 same key with a different payload; 409 winner still processing; "
+     "404 unknown merchant; 422 invalid body"],
+    ["GET /payments/{id}", "Final logical payment state", "200 OK",
+     "404 unknown payment"],
+    ["GET /merchants/{id}/churn-risk",
+     "Churn score, risk band and top factors, derived server-side from the ledger",
+     "200 OK", "404 unknown merchant; <<409 insufficient history>>"],
+    ["GET /health", "Container and load-balancer health check", "200 OK", "—"],
+]
+
+A1_TREE = \
+"""vault-api/
+├── app/
+│   ├── api/routes/      health.py  merchants.py  payments.py  analytics.py
+│   ├── core/            config.py
+│   ├── db/models/       merchant.py  payment.py  idempotency.py
+│   ├── schemas/         merchant.py  payment.py  analytics.py
+│   ├── services/        payment_service.py  idempotency_service.py
+│   │                    merchant_service.py  churn_service.py
+│   └── main.py
+├── ml/
+│   ├── synthetic/       generate.py
+│   ├── features/        build_snapshots.py
+│   ├── baselines/       recency.py
+│   └── train.py  evaluate.py  explain.py  inference.py
+├── data/                generated/  processed/        (gitignored)
+├── artifacts/           xgboost_model.json  model_metadata.json
+│                        metrics.json
+├── tests/               unit/  integration/  concurrency/
+├── nginx/               nginx.conf
+├── alembic/             versions/
+├── scripts/             stress_test.py
+├── docker-compose.yml   Dockerfile   pyproject.toml
+├── PROJECT_SPEC.md      README.md"""
+
 C4_FINAL = [
     "The final iteration was shaped by a defect the leakage tests caught before any model was "
     "trained, and it is worth recording because it would have been invisible in the metrics. The "
@@ -710,7 +804,7 @@ C5_MODULES = [
     "leave it; none is ever a model feature.",
     "Feature and Label Pipeline: ml/features/build_snapshots.py walks each merchant forward in "
     "7-day steps, applies the eligibility rules, cuts the payment frame at created_at <= t, "
-    "derives the thirteen feature columns over the 90-day window, computes the 60-day forward "
+    "derives the twelve feature columns over the 90-day window, computes the 60-day forward "
     "label, and writes data/processed/merchant_snapshots.parquet.",
     "Baselines: ml/baselines/recency.py provides the majority classifier and the one-feature "
     "recency threshold, fitted on validation, that the gradient-boosted models have to beat before "
@@ -1060,7 +1154,7 @@ C7_TEAM = [
 ]
 C7_CO = [
     "CO1 – Data preprocessing and feature engineering: a reproducible pipeline turning a raw "
-    "payment ledger into thirteen leakage-safe temporal features over a 90-day window, with "
+    "payment ledger into twelve leakage-safe temporal features over a 90-day window, with "
     "missing comparison periods preserved rather than imputed, Sections 4.3 and 5.1 and Code 5.1.",
     "CO2 – Supervised learning: an XGBoost binary classifier trained on merchant × snapshot rows "
     "with scale_pos_weight for a <<3.9%>> positive class and a small validation-driven parameter "
@@ -1171,14 +1265,20 @@ FIGURES = {
             "the lock. The two database checks and the unique constraint are annotated so the "
             "reader can see the database, not the lock, is the authority.",
             12.0),
-    "4.3": ("Temporal Formulation on One Merchant Timeline",
+    "4.3": ("Core Domain Schema and Its Constraints",
+            "The three core tables with their columns and types, the foreign keys between "
+            "them, the unique invariant on (merchant_id, idempotency_key), the amount check "
+            "and the analytical index, and a note that no ML feature is stored on any core "
+            "table.",
+            7.0),
+    "4.4": ("Temporal Formulation on One Merchant Timeline",
             "One merchant timeline with payment attempts as ticks and failures marked. "
             "Snapshot t is marked, with the 90-day observation window shaded to its left and "
             "the 60-day prediction horizon to its right, so features come only from the left "
             "of t and the label only from the right. Three stacked rows below show the same "
             "construction repeating every 7 days.",
             7.0),
-    "4.4": ("Twenty HTTP Requests Resolving to One ML Event",
+    "4.5": ("Twenty HTTP Requests Resolving to One ML Event",
             "Two columns. Without idempotency, 20 duplicate requests reach three stateless "
             "workers and commit 17 payment rows, inflating tx_count_30d 17-fold. With the "
             "Redis lock and the PostgreSQL unique constraint, the same 20 requests commit one "
@@ -1307,6 +1407,8 @@ LIST_OF_TABLES = [
     ["2.1", "Summary of Related Approaches", pg("t2.1")],
     ["3.1", "Weekly PBL Progress Log", pg("t3.1")],
     ["3.2", "Hardware and Software Requirements", pg("t3.2")],
+    ["4.1", "V1 Feature Schema and the Model C / Model D Ablation", pg("t4.1")],
+    ["5.1", "HTTP API Contract", pg("t5.1")],
     ["6.1", "Synthetic Dataset Statistics", pg("t6.1")],
     ["6.2", "Chronological Splits and Label Balance", pg("t6.2")],
     ["6.3", "Test-Split Results for Models A–D", pg("t6.3")],
@@ -1317,7 +1419,7 @@ LIST_OF_TABLES = [
 
 LIST_OF_FIGURES = [["FIGURE NO.", "TITLE", "PAGE NO."],
                    ["4.1", "Target System Architecture of vault-api", pg("f4.1")]]
-for _n in ("4.2", "4.3", "4.4", "5.1", "5.2", "5.3", "5.4",
+for _n in ("4.2", "4.3", "4.4", "4.5", "5.1", "5.2", "5.3", "5.4",
            "6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7"):
     LIST_OF_FIGURES.append([_n, FIGURES[_n][0], pg("f" + _n)])
 
@@ -1507,9 +1609,14 @@ def build():
     set_text(P[239], C4_REFINE[0])
     c = Cur(P[239])
     c.para(P[239], C4_REFINE[1])
-    c.para(P[239], C4_REFINE[2])
     add_figure(doc, c, P[234], "4.3")
+    c.para(P[239], C4_REFINE[2])
     add_figure(doc, c, P[234], "4.4")
+    add_figure(doc, c, P[234], "4.5")
+
+    c.para(P[239], C4_FEATURES_TXT)
+    c.para(P[220], "Table 4.1  V1 Feature Schema and the Model C / Model D Ablation")
+    left_align(c.table(T[6], C4_FEATURES, [0.34, 0.50, 0.08, 0.08]), [0, 1])
 
     set_text(P[240], "4.4 FINAL APPROACH")
     set_text(P[241], C4_FINAL[0])
@@ -1529,6 +1636,10 @@ def build():
     c = Cur(P[255])
     for t in C5_MODULES[7:]:
         c.para(P[255], t)
+
+    c.para(P[255], C5_API_TXT)
+    c.para(P[220], "Table 5.1  HTTP API Contract")
+    left_align(c.table(T[6], C5_API, [0.29, 0.25, 0.20, 0.26]), [0, 1, 2, 3])
 
     set_text(P[256], "5.2 KEY CODE SNIPPETS")
     set_text(P[258],
@@ -1669,6 +1780,10 @@ def build():
              "Compose and Nginx configuration, the ml/ pipeline and the pytest suite — is "
              "maintained in the team Git repository, whose layout is given in the README. The key "
              "listings appear in Section 5.2 and the saved model artifacts in artifacts/.")
+    tree = Cur(P[384])
+    for line in A1_TREE.split("\n"):
+        tree.para(code_donor, line)
+
     set_text(P[385], "A.2 WEEKLY LOG AND MENTOR SIGN-OFFS")
     set_text(P[386],
              "Table 3.1 is the complete weekly PBL log for the twelve-week cycle. The supervisor's "
@@ -1678,14 +1793,14 @@ def build():
              "Table A.1 records the self-assessed and peer-assessed contribution of each team "
              "member. Both members rated the work as an equal 50% share, and the remarks column "
              "summarises the parts of the system each member was primarily responsible for.")
-    fill_table(T[10], weights=[0.22, 0.17, 0.17, 0.44], rows=[
-        ["Team Member", "Self-Rated Contribution (%)", "Peer-Rated Contribution (%)", "Remarks"],
+    left_align(fill_table(T[10], weights=[0.24, 0.15, 0.15, 0.46], rows=[
+        ["Team Member", "Self-Rated (%)", "Peer-Rated (%)", "Remarks"],
         [S1, "50%", "50%", "Synthetic data generator, temporal feature and label pipeline, "
                            "baselines, XGBoost training and evaluation, SHAP explainability"],
         [S2, "50%", "50%", "FastAPI payment API, PostgreSQL schema and idempotency invariant, "
                            "Redis coordination, Nginx load balancing, concurrency and resilience "
                            "tests, churn-risk endpoint"],
-    ])
+    ]), [0, 3])
 
     remove(P[390]._p)      # trailing empties left a blank final page
     remove(P[391]._p)

@@ -190,26 +190,53 @@ def main():
     w("")
     drawn = [n for n in ["4.1"] + list(br.FIGURES) if n in br.DRAWN]
     boxes = [n for n in br.FIGURES if n not in br.DRAWN]
-    w(f"**{len(drawn)} are finished diagrams** and **{len(boxes)} are empty framed boxes.** "
-      f"The drawn ones describe the design rather than a measured result, so they are built "
-      f"from `README.md` and `PROJECT_SPEC.md` and will not need replacing when the pipeline "
-      f"runs. Regenerate them with `python report/make_diagrams.py`.")
+    schematics = [n for n in drawn if n.startswith("4.")]
+    charts = [n for n in drawn if n.startswith("6.")]
+    w(f"**{len(drawn)} are rendered** and **{len(boxes)} are still empty framed boxes.**")
+    w("")
+    w(f"### {len(schematics)} schematics — final, nothing to replace")
+    w("")
+    w("These describe the design rather than a measured result, so they are built from "
+      "`README.md` and `PROJECT_SPEC.md` and survive the pipeline unchanged. Regenerate with "
+      "`python report/make_diagrams.py`.")
     w("")
     w("| Figure | Title | Source |")
     w("|---|---|---|")
-    w("| 4.1 | Target System Architecture of vault-api | `make_diagrams.py` → "
-      "`fig_4_1_architecture.png` |")
-    for n in drawn:
-        if n == "4.1":
-            continue
-        w(f"| {n} | {br.FIGURES[n][0]} | `make_diagrams.py` → `{br.DRAWN[n][0]}` |")
+    for n in schematics:
+        # 4.1 reuses the template's own image paragraph, so it has no FIGURES entry
+        title = br.FIGURES[n][0] if n in br.FIGURES else "Target System Architecture of vault-api"
+        w(f"| {n} | {title} | `{br.DRAWN[n][0]}` |")
     w("")
-    w("Figure 4.4 is the one diagram carrying a draft number: the **17 duplicate rows from 20 "
-      "requests**. It must be kept in step with Table 6.4 and the Abstract — edit `fig_4_4()` "
-      "in `make_diagrams.py` when the real stress-test figure is known.")
+    w("One exception: **Figure 4.5 embeds a draft number** — the 17 duplicate rows from 20 "
+      "requests. Keep it in step with Table 6.4 and the Abstract by editing `fig_4_4()` in "
+      "`make_diagrams.py`.")
     w("")
-    w("The remaining boxes all need a running system: six screenshots or terminal captures, "
-      "and five charts that need real model output.")
+    w(f"### {len(charts)} charts — DRAFT, all must be regenerated")
+    w("")
+    w("Rendered by `python report/make_charts.py` from the draft numbers in Tables 6.1-6.3. "
+      "**None of it is measured.** They differ in how much was invented:")
+    w("")
+    w("| Figure | Title | Source | What is invented |")
+    w("|---|---|---|---|")
+    invented = {
+        "6.1": "Nothing beyond Table 6.2 — it redraws the per-split counts.",
+        "6.2": "**The curve shape.** Only the four PR-AUC scalars and the operating points are "
+               "fixed; the curve between them is a two-parameter fit chosen to integrate to the "
+               "stated area and pass through the operating point.",
+        "6.3": "Nothing beyond the confusion matrix already stated in Section 6.2.",
+        "6.4": "**The entire point cloud.** Only the global feature ranking is fixed; the "
+               "per-row SHAP values come from a seeded RNG.",
+        "6.5": "**All nine contributions.** Only the ranking is fixed; the values were chosen "
+               "to sum to a log-odds of 1.47, i.e. a churn_score of 0.81.",
+    }
+    for n in charts:
+        w(f"| {n} | {br.FIGURES[n][0]} | `{br.DRAWN[n][0]}` | {invented[n]} |")
+    w("")
+    w("Replace all five from `artifacts/metrics.json`, the saved test-split predictions and the "
+      "SHAP values. Regenerate 6.2, 6.4 and 6.5 **first** — their shapes carry claims that the "
+      "summary numbers do not.")
+    w("")
+    w(f"### {len(boxes)} boxes left — these need a running system")
     w("")
     w("| Figure | Title | Box height | What it must show |")
     w("|---|---|---|---|")
@@ -270,8 +297,10 @@ def main():
     w("")
 
     OUT.write_text("\n".join(lines))
-    print(f"wrote {OUT}: {len(rows)} draft values, {len(code_listings)} code lines, "
-          f"{len(br.FIGURES)} figure boxes")
+    print(f"wrote {OUT}: {len(rows)} draft values, "
+          f"{sum(n for _, _, n in code_listings)} code lines, "
+          f"{len(br.DRAWN)} drawn figures, "
+          f"{len([n for n in br.FIGURES if n not in br.DRAWN])} boxes left")
 
 
 if __name__ == "__main__":

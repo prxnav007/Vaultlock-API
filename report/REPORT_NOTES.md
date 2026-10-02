@@ -8,7 +8,7 @@ Every draft value carries the character style **`DraftValue`**, which inherits a
 
 > Home → Styles pane → `DraftValue` → right-click → **Select All N Instance(s)**
 
-There are **203 DraftValue runs** in the document: **127 draft numbers and phrases** across 8 sections, plus **76 draft code listing lines** in Section 5.2.
+There are **204 DraftValue runs** in the document: **128 draft numbers and phrases** across 9 sections, plus **76 draft code listing lines** in Section 5.2.
 
 ## Regenerating the document
 
@@ -44,18 +44,37 @@ Two points worth confirming with the supervisor:
 
 ## Figures
 
-**4 are finished diagrams** and **11 are empty framed boxes.** The drawn ones describe the design rather than a measured result, so they are built from `README.md` and `PROJECT_SPEC.md` and will not need replacing when the pipeline runs. Regenerate them with `python report/make_diagrams.py`.
+**10 are rendered** and **6 are still empty framed boxes.**
+
+### 5 schematics — final, nothing to replace
+
+These describe the design rather than a measured result, so they are built from `README.md` and `PROJECT_SPEC.md` and survive the pipeline unchanged. Regenerate with `python report/make_diagrams.py`.
 
 | Figure | Title | Source |
 |---|---|---|
-| 4.1 | Target System Architecture of vault-api | `make_diagrams.py` → `fig_4_1_architecture.png` |
-| 4.2 | Idempotent POST /payments Request Flow | `make_diagrams.py` → `fig_4_2_payment_flow.png` |
-| 4.3 | Temporal Formulation on One Merchant Timeline | `make_diagrams.py` → `fig_4_3_temporal.png` |
-| 4.4 | Twenty HTTP Requests Resolving to One ML Event | `make_diagrams.py` → `fig_4_4_one_event.png` |
+| 4.1 | Target System Architecture of vault-api | `fig_architecture.png` |
+| 4.2 | Idempotent POST /payments Request Flow | `fig_payment_flow.png` |
+| 4.3 | Core Domain Schema and Its Constraints | `fig_schema.png` |
+| 4.4 | Temporal Formulation on One Merchant Timeline | `fig_temporal.png` |
+| 4.5 | Twenty HTTP Requests Resolving to One ML Event | `fig_one_event.png` |
 
-Figure 4.4 is the one diagram carrying a draft number: the **17 duplicate rows from 20 requests**. It must be kept in step with Table 6.4 and the Abstract — edit `fig_4_4()` in `make_diagrams.py` when the real stress-test figure is known.
+One exception: **Figure 4.5 embeds a draft number** — the 17 duplicate rows from 20 requests. Keep it in step with Table 6.4 and the Abstract by editing `fig_4_4()` in `make_diagrams.py`.
 
-The remaining boxes all need a running system: six screenshots or terminal captures, and five charts that need real model output.
+### 5 charts — DRAFT, all must be regenerated
+
+Rendered by `python report/make_charts.py` from the draft numbers in Tables 6.1-6.3. **None of it is measured.** They differ in how much was invented:
+
+| Figure | Title | Source | What is invented |
+|---|---|---|---|
+| 6.1 | Class Balance Across the Chronological Splits | `fig_class_balance.png` | Nothing beyond Table 6.2 — it redraws the per-split counts. |
+| 6.2 | Precision–Recall Curves for Models A–D | `fig_pr_curves.png` | **The curve shape.** Only the four PR-AUC scalars and the operating points are fixed; the curve between them is a two-parameter fit chosen to integrate to the stated area and pass through the operating point. |
+| 6.3 | Confusion Matrix for Model D at the Frozen Threshold | `fig_confusion_matrix.png` | Nothing beyond the confusion matrix already stated in Section 6.2. |
+| 6.4 | SHAP Summary (Beeswarm) for Model D | `fig_shap_beeswarm.png` | **The entire point cloud.** Only the global feature ranking is fixed; the per-row SHAP values come from a seeded RNG. |
+| 6.5 | SHAP Waterfall for One High-Risk Merchant | `fig_shap_waterfall.png` | **All nine contributions.** Only the ranking is fixed; the values were chosen to sum to a log-odds of 1.47, i.e. a churn_score of 0.81. |
+
+Replace all five from `artifacts/metrics.json`, the saved test-split predictions and the SHAP values. Regenerate 6.2, 6.4 and 6.5 **first** — their shapes carry claims that the summary numbers do not.
+
+### 6 boxes left — these need a running system
 
 | Figure | Title | Box height | What it must show |
 |---|---|---|---|
@@ -63,11 +82,6 @@ The remaining boxes all need a running system: six screenshots or terminal captu
 | 5.2 | Churn-Risk Endpoint Response for a High-Risk Merchant | 7 cm | Screenshot of the JSON response body from GET /merchants/{merchant_id}/churn-risk for a merchant the model scores as high risk, showing merchant_id, snapshot_at, churn_score, risk_band HIGH, predicted_churn true, the top_factors list with feature names and directions, and model_version. |
 | 5.3 | Churn-Risk Dashboard — High-Risk Merchant | 12 cm | Screenshot of the demonstration dashboard for the same high-risk merchant: the churn score and risk band, the merchant's recent payment activity, and the top contributing factors with their direction of effect. Capture the state where the risk band reads HIGH. |
 | 5.4 | Churn-Risk Dashboard — Low-Risk Merchant | 12 cm | The same dashboard screen captured for a merchant with steady recent activity, so the score, the risk band and the top factors can be compared directly against Figure 5.3. |
-| 6.1 | Class Balance Across the Chronological Splits | 7 cm | Grouped bar chart, one group per split (train, validation, test), showing positive and negative snapshot counts on a log scale, with the positive rate printed above each group. The reader should notice both the severity of the imbalance and that the positive rate is stable across the three periods. |
-| 6.2 | Precision–Recall Curves for Models A–D | 7 cm | Precision–recall curves for all four models on the test split: recall on the x-axis, precision on the y-axis, one line per model with PR-AUC in the legend, and a horizontal dashed line at the 0.039 positive-rate baseline. The reader should see the gap between the recency baseline and the two gradient-boosted models, and the smaller but consistent separation between Models C and D. |
-| 6.3 | Confusion Matrix for Model D at the Frozen Threshold | 7 cm | A 2×2 confusion matrix heatmap for Model D on the test split at threshold 0.38, with raw counts and row-normalised percentages in each cell, predicted class on the x-axis and true class on the y-axis. |
-| 6.4 | SHAP Summary (Beeswarm) for Model D | 7 cm | SHAP beeswarm over the test split, features ordered by mean absolute SHAP value, one point per snapshot coloured by feature value. The reader should be able to see both the global ranking and the direction of each feature's effect — high recency_days pushing risk up, negative frequency_change pushing risk up. |
-| 6.5 | SHAP Waterfall for One High-Risk Merchant | 7 cm | SHAP waterfall plot for a single high-risk test snapshot, from the base value to the final score, showing each feature's signed contribution. Use the same merchant as Figures 5.2 and 5.3 so the explanation in the API response can be traced back to this plot. |
 | 6.6 | Pytest Report — 38 of 38 Tests Passing | 7 cm | Terminal capture of the full pytest run with -v, showing the unit, integration, concurrency and leakage test files and the final summary line reporting 38 passed. |
 | 6.7 | Concurrency Test Output With and Without Idempotency | 7 cm | Side-by-side terminal capture of the stress test: the unprotected run reporting 20 requests and 17 committed payment rows, and the protected run reporting 50 requests, 1 payment row and 1 idempotency record with the 201 / replay / 409 breakdown. The contrast between the two row counts is the headline. |
 
@@ -100,7 +114,8 @@ The Mentor Remarks column is **invented**, written in the template's register to
 | 3.1 WEEKLY PBL PROGRESS LOG | Table 3.1  Weekly PBL Progress Log — row “8–10” | Race demonstration is convincing. Report the before-and-after together. | `Race demonstration is convincing. Report the before-and-after together.` | **Draft mentor remarks — to be confirmed with Dr. Thiyagarajan**; Work Done columns from git history |
 | 3.1 WEEKLY PBL PROGRESS LOG | Table 3.1  Weekly PBL Progress Log — row “11–12” | ran the resilience cases and the full suite, 38 of 38 tests passing. | `38 of 38` | **Draft mentor remarks — to be confirmed with Dr. Thiyagarajan**; Work Done columns from git history |
 | 3.1 WEEKLY PBL PROGRESS LOG | Table 3.1  Weekly PBL Progress Log — row “11–12” | Complete. Ready for final review. | `Complete. Ready for final review.` | **Draft mentor remarks — to be confirmed with Dr. Thiyagarajan**; Work Done columns from git history |
-| 4.5 TESTING AND EXECUTION | Figure 4.4  Twenty HTTP Requests Resolving to One ML Event | Thirty-eight pytest tests cover the system in four groups. | `Thirty-eight` | `pytest -v` summary line |
+| 4.5 TESTING AND EXECUTION | Table 4.1  V1 Feature Schema and the Model C / Model D Ablation | Thirty-eight pytest tests cover the system in four groups. | `Thirty-eight` | `pytest -v` summary line |
+| 5.1 MODULE DESCRIPTION | Table 5.1  HTTP API Contract — row “GET /merchants/{id}/churn-risk” | 409 insufficient history | `409 insufficient history` | — |
 | 6.2 RESULTS AND MODEL COMPARISON | Table 6.1  Synthetic Dataset Statistics — row “Merchants” | 2,000 | `2,000` | `ml/synthetic/generate.py` run log → `data/generated/` row counts |
 | 6.2 RESULTS AND MODEL COMPARISON | Table 6.1  Synthetic Dataset Statistics — row “History covered” | 24 months (2024-07-01 to 2026-06-30) | `24 months (2024-07-01 to 2026-06-30)` | `ml/synthetic/generate.py` run log → `data/generated/` row counts |
 | 6.2 RESULTS AND MODEL COMPARISON | Table 6.1  Synthetic Dataset Statistics — row “Random seed” | 42 | `42` | `ml/synthetic/generate.py` run log → `data/generated/` row counts |

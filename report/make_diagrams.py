@@ -149,7 +149,7 @@ def fig_4_1():
          "Offline training path (Feature Generation → XGBoost → SHAP) runs outside "
          "the request path.",
          ha="left", fs=7.4, color=FAINT, style="italic")
-    save(fig, "fig_4_1_architecture.png")
+    save(fig, "fig_architecture.png")
 
 
 # --------------------------------------------------------------------------
@@ -216,7 +216,92 @@ def fig_4_2():
 
     note(ax, 1, 1, "Redis reduces duplicate work; PostgreSQL decides what is true.",
          ha="left", color=FAINT, style="italic")
-    save(fig, "fig_4_2_payment_flow.png")
+    save(fig, "fig_payment_flow.png")
+
+
+# --------------------------------------------------------------------------
+# 4.3  Core domain schema  (PROJECT_SPEC §§8-13)
+# --------------------------------------------------------------------------
+def entity(ax, cx, top, w, title, fields, fc=INFRA):
+    """An entity box: a title bar over rows of [badge] name ......... type."""
+    rh, hh = 4.6, 7.0
+    h = hh + rh * len(fields)
+    bot_y = top - h
+    ax.add_patch(FancyBboxPatch((cx - w / 2, bot_y), w, h,
+                                boxstyle="round,pad=0.3,rounding_size=1.0",
+                                linewidth=1.25, edgecolor=EDGE, facecolor="white",
+                                zorder=2))
+    ax.add_patch(FancyBboxPatch((cx - w / 2, top - hh), w, hh,
+                                boxstyle="square,pad=0", linewidth=0,
+                                facecolor=fc, zorder=3))
+    ax.text(cx, top - hh / 2, title, ha="center", va="center", fontsize=8.6,
+            fontweight="bold", color=INK, zorder=4)
+    for i, (name, typ, badge) in enumerate(fields):
+        y = top - hh - rh * (i + 0.5)
+        if badge:
+            ax.text(cx - w / 2 + 2, y, badge, ha="left", va="center", fontsize=6.0,
+                    color=STOP_EDGE, fontweight="bold", zorder=4)
+        ax.text(cx - w / 2 + 8, y, name, ha="left", va="center", fontsize=7.0,
+                color=INK, zorder=4)
+        ax.text(cx + w / 2 - 2, y, typ, ha="right", va="center", fontsize=6.6,
+                color=FAINT, zorder=4)
+    return cx, top, bot_y, w
+
+
+def fig_4_3_schema():
+    fig, ax = canvas(6.3, 6.2, xmax=114, ymax=112)
+
+    entity(ax, 26, 110, 50, "merchants", [
+        ("merchant_id", "UUID", "PK"),
+        ("joined_at", "TIMESTAMPTZ", ""),
+        ("industry", "VARCHAR  NULL", ""),
+        ("created_at", "TIMESTAMPTZ", ""),
+    ], fc=STORE)
+
+    entity(ax, 26, 78, 50, "payments", [
+        ("payment_id", "UUID", "PK"),
+        ("merchant_id", "UUID", "FK"),
+        ("amount_minor", "BIGINT", ""),
+        ("currency", "VARCHAR(3)", ""),
+        ("status", "PaymentStatus", ""),
+        ("failure_code", "VARCHAR  NULL", ""),
+        ("created_at", "TIMESTAMPTZ", ""),
+        ("processed_at", "TIMESTAMPTZ  NULL", ""),
+        ("updated_at", "TIMESTAMPTZ", ""),
+    ], fc=INFRA)
+
+    entity(ax, 86, 110, 52, "idempotency_records", [
+        ("id", "UUID", "PK"),
+        ("merchant_id", "UUID", "FK"),
+        ("idempotency_key", "VARCHAR(128)", ""),
+        ("request_fingerprint", "CHAR(64)", ""),
+        ("state", "IdempotencyState", ""),
+        ("payment_id", "UUID  NULL", "FK"),
+        ("response_status_code", "INTEGER  NULL", ""),
+        ("response_body", "JSONB  NULL", ""),
+        ("created_at", "TIMESTAMPTZ", ""),
+        ("updated_at", "TIMESTAMPTZ", ""),
+    ], fc=INFRA)
+
+    arrow(ax, (26, 84.6), (26, 78))                 # merchants 1 -- * payments
+    note(ax, 28, 81.3, "1 : many", ha="left", fs=6.6)
+    arrow(ax, (51, 97), (60, 97))                   # merchants 1 -- * idempotency
+    note(ax, 55.5, 97, "1 : many", fs=6.2, bbox=True)
+    arrow(ax, (60, 66), (51, 66))                   # idempotency 0/1 -- 1 payment
+    note(ax, 55.5, 66, "0/1 : 1", fs=6.2, bbox=True)
+
+    ax.add_patch(FancyBboxPatch((3, 9), 108, 15,
+                                boxstyle="round,pad=0.4,rounding_size=1.0",
+                                linewidth=1.0, edgecolor=STOP_EDGE,
+                                facecolor="#fdf6f6", zorder=2))
+    note(ax, 57, 19.5, "UNIQUE (merchant_id, idempotency_key)      "
+                       "CHECK amount_minor > 0      INDEX (merchant_id, created_at)",
+         fs=6.8, color="#7a3b3b", weight="bold")
+    note(ax, 57, 13,
+         "No ML feature and no churn flag is stored on any core table: features are derived "
+         "from these facts,\nso the model can change without a migration.",
+         fs=7.0, color="#7a3b3b", style="italic")
+    save(fig, "fig_schema.png")
 
 
 # --------------------------------------------------------------------------
@@ -276,7 +361,7 @@ def fig_4_3():
          "Eligible only if tenure ≥ 90 d, a full 60 d of data follows t, and the merchant "
          "attempted ≥ 1 payment in the prior 60 d.",
          ha="left", fs=7.2, color=FAINT, style="italic")
-    save(fig, "fig_4_3_temporal.png")
+    save(fig, "fig_temporal.png")
 
 
 # --------------------------------------------------------------------------
@@ -317,11 +402,12 @@ def fig_4_4():
          "A retry is not a new business event. Idempotency protects the payment and the "
          "behavioural data with one mechanism.",
          ha="left", fs=7.2, color=FAINT, style="italic")
-    save(fig, "fig_4_4_one_event.png")
+    save(fig, "fig_one_event.png")
 
 
 if __name__ == "__main__":
     fig_4_1()
     fig_4_2()
+    fig_4_3_schema()
     fig_4_3()
     fig_4_4()
