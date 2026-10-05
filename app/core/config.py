@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -19,6 +21,17 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_HOST: str = "localhost"
     POSTGRES_PORT: int = 5432
+
+    APP_ENV: str = "dev"
+
+    # Trained artifacts, loaded once at startup. Training never happens in the
+    # request path.
+    MODEL_PATH: Path = Path("artifacts/xgboost_model.json")
+    MODEL_METADATA_PATH: Path = Path("artifacts/model_metadata.json")
+    # When true, a missing or malformed model artifact fails startup instead of
+    # letting the service run without the thing it exists to serve. Set false
+    # for tests and for working on the payment path before a model exists.
+    REQUIRE_MODEL: bool = True
 
     @property
     def async_database_url(self) -> str:

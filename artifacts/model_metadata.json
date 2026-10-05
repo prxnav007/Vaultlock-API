@@ -1,0 +1,54 @@
+{
+  "model_version": "xgb-v1",
+  "feature_names": [
+    "recency_days",
+    "tx_count_30d",
+    "tx_count_prev_30d",
+    "tx_count_90d",
+    "frequency_change",
+    "avg_success_amount_30d",
+    "avg_success_amount_prev_30d",
+    "monetary_change",
+    "failure_rate_30d",
+    "failure_rate_prev_30d",
+    "failure_rate_change",
+    "tenure_days"
+  ],
+  "observation_window_days": 90,
+  "prediction_horizon_days": 60,
+  "snapshot_cadence_days": 7,
+  "min_tenure_days": 90,
+  "classification_threshold": 0.8400000000000001,
+  "risk_band_edges": {
+    "medium": 0.8400000000000001,
+    "high": 0.9174557328224182
+  },
+  "risk_band_rule": "LOW below the frozen threshold; MEDIUM from the threshold to the high edge; HIGH at or above it. The high edge is twice the threshold, or the 99th percentile of validation scores when twice the threshold is unreachable.",
+  "training_data_time_range": [
+    "2024-09-29 00:00:00+00:00",
+    "2025-08-10 00:00:00+00:00"
+  ],
+  "validation_data_time_range": [
+    "2025-10-19 00:00:00+00:00",
+    "2025-12-21 00:00:00+00:00"
+  ],
+  "test_data_time_range": [
+    "2026-03-01 00:00:00+00:00",
+    "2026-04-26 00:00:00+00:00"
+  ],
+  "purge_gap_days": 63,
+  "scale_pos_weight": 23.358281665190432,
+  "selected_hyperparameters": {
+    "max_depth": 3,
+    "learning_rate": 0.05,
+    "n_estimators": 300,
+    "min_child_weight": 1,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.0,
+    "reg_lambda": 1.0
+  },
+  "trained_at": "2026-10-05T17:08:54.881363+00:00",
+  "git_sha": "54fef8b87985dc94c368ff519874e57995897ebe",
+  "quick_mode": false
+}

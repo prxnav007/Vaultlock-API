@@ -1,0 +1,446 @@
+{
+  "eligible_rows": 116464,
+  "positives": 5283,
+  "positive_rate": 0.04536165682099189,
+  "merchants_represented": 1991,
+  "snapshot_weeks": 83,
+  "first_snapshot": "2024-09-29 00:00:00+00:00",
+  "last_snapshot": "2026-04-26 00:00:00+00:00",
+  "grid_first": "2024-06-30 00:00:00+00:00",
+  "grid_last": "2026-06-28 00:00:00+00:00",
+  "rejected": {
+    "no_recent_activity": 12623,
+    "no_payments": 742
+  },
+  "missing_by_feature": {
+    "recency_days": 0,
+    "tx_count_30d": 0,
+    "tx_count_prev_30d": 0,
+    "tx_count_90d": 0,
+    "frequency_change": 0,
+    "avg_success_amount_30d": 7971,
+    "avg_success_amount_prev_30d": 6849,
+    "monetary_change": 14511,
+    "failure_rate_30d": 7460,
+    "failure_rate_prev_30d": 6328,
+    "failure_rate_change": 13788,
+    "tenure_days": 0
+  },
+  "per_week": [
+    {
+      "snapshot_at": "2024-09-29 00:00:00+00:00",
+      "rows": 70,
+      "positives": 2
+    },
+    {
+      "snapshot_at": "2024-10-06 00:00:00+00:00",
+      "rows": 302,
+      "positives": 9
+    },
+    {
+      "snapshot_at": "2024-10-13 00:00:00+00:00",
+      "rows": 537,
+      "positives": 14
+    },
+    {
+      "snapshot_at": "2024-10-20 00:00:00+00:00",
+      "rows": 747,
+      "positives": 22
+    },
+    {
+      "snapshot_at": "2024-10-27 00:00:00+00:00",
+      "rows": 974,
+      "positives": 30
+    },
+    {
+      "snapshot_at": "2024-11-03 00:00:00+00:00",
+      "rows": 989,
+      "positives": 33
+    },
+    {
+      "snapshot_at": "2024-11-10 00:00:00+00:00",
+      "rows": 1004,
+      "positives": 36
+    },
+    {
+      "snapshot_at": "2024-11-17 00:00:00+00:00",
+      "rows": 1020,
+      "positives": 31
+    },
+    {
+      "snapshot_at": "2024-11-24 00:00:00+00:00",
+      "rows": 1032,
+      "positives": 31
+    },
+    {
+      "snapshot_at": "2024-12-01 00:00:00+00:00",
+      "rows": 1050,
+      "positives": 31
+    },
+    {
+      "snapshot_at": "2024-12-08 00:00:00+00:00",
+      "rows": 1072,
+      "positives": 34
+    },
+    {
+      "snapshot_at": "2024-12-15 00:00:00+00:00",
+      "rows": 1084,
+      "positives": 39
+    },
+    {
+      "snapshot_at": "2024-12-22 00:00:00+00:00",
+      "rows": 1096,
+      "positives": 39
+    },
+    {
+      "snapshot_at": "2024-12-29 00:00:00+00:00",
+      "rows": 1112,
+      "positives": 42
+    },
+    {
+      "snapshot_at": "2025-01-05 00:00:00+00:00",
+      "rows": 1127,
+      "positives": 40
+    },
+    {
+      "snapshot_at": "2025-01-12 00:00:00+00:00",
+      "rows": 1137,
+      "positives": 40
+    },
+    {
+      "snapshot_at": "2025-01-19 00:00:00+00:00",
+      "rows": 1150,
+      "positives": 43
+    },
+    {
+      "snapshot_at": "2025-01-26 00:00:00+00:00",
+      "rows": 1171,
+      "positives": 45
+    },
+    {
+      "snapshot_at": "2025-02-02 00:00:00+00:00",
+      "rows": 1190,
+      "positives": 40
+    },
+    {
+      "snapshot_at": "2025-02-09 00:00:00+00:00",
+      "rows": 1199,
+      "positives": 47
+    },
+    {
+      "snapshot_at": "2025-02-16 00:00:00+00:00",
+      "rows": 1220,
+      "positives": 49
+    },
+    {
+      "snapshot_at": "2025-02-23 00:00:00+00:00",
+      "rows": 1240,
+      "positives": 46
+    },
+    {
+      "snapshot_at": "2025-03-02 00:00:00+00:00",
+      "rows": 1256,
+      "positives": 45
+    },
+    {
+      "snapshot_at": "2025-03-09 00:00:00+00:00",
+      "rows": 1268,
+      "positives": 48
+    },
+    {
+      "snapshot_at": "2025-03-16 00:00:00+00:00",
+      "rows": 1287,
+      "positives": 48
+    },
+    {
+      "snapshot_at": "2025-03-23 00:00:00+00:00",
+      "rows": 1299,
+      "positives": 54
+    },
+    {
+      "snapshot_at": "2025-03-30 00:00:00+00:00",
+      "rows": 1309,
+      "positives": 61
+    },
+    {
+      "snapshot_at": "2025-04-06 00:00:00+00:00",
+      "rows": 1314,
+      "positives": 55
+    },
+    {
+      "snapshot_at": "2025-04-13 00:00:00+00:00",
+      "rows": 1325,
+      "positives": 59
+    },
+    {
+      "snapshot_at": "2025-04-20 00:00:00+00:00",
+      "rows": 1340,
+      "positives": 62
+    },
+    {
+      "snapshot_at": "2025-04-27 00:00:00+00:00",
+      "rows": 1359,
+      "positives": 62
+    },
+    {
+      "snapshot_at": "2025-05-04 00:00:00+00:00",
+      "rows": 1370,
+      "positives": 63
+    },
+    {
+      "snapshot_at": "2025-05-11 00:00:00+00:00",
+      "rows": 1381,
+      "positives": 61
+    },
+    {
+      "snapshot_at": "2025-05-18 00:00:00+00:00",
+      "rows": 1394,
+      "positives": 68
+    },
+    {
+      "snapshot_at": "2025-05-25 00:00:00+00:00",
+      "rows": 1398,
+      "positives": 72
+    },
+    {
+      "snapshot_at": "2025-06-01 00:00:00+00:00",
+      "rows": 1408,
+      "positives": 73
+    },
+    {
+      "snapshot_at": "2025-06-08 00:00:00+00:00",
+      "rows": 1421,
+      "positives": 68
+    },
+    {
+      "snapshot_at": "2025-06-15 00:00:00+00:00",
+      "rows": 1429,
+      "positives": 56
+    },
+    {
+      "snapshot_at": "2025-06-22 00:00:00+00:00",
+      "rows": 1451,
+      "positives": 62
+    },
+    {
+      "snapshot_at": "2025-06-29 00:00:00+00:00",
+      "rows": 1464,
+      "positives": 65
+    },
+    {
+      "snapshot_at": "2025-07-06 00:00:00+00:00",
+      "rows": 1477,
+      "positives": 68
+    },
+    {
+      "snapshot_at": "2025-07-13 00:00:00+00:00",
+      "rows": 1489,
+      "positives": 74
+    },
+    {
+      "snapshot_at": "2025-07-20 00:00:00+00:00",
+      "rows": 1492,
+      "positives": 70
+    },
+    {
+      "snapshot_at": "2025-07-27 00:00:00+00:00",
+      "rows": 1502,
+      "positives": 69
+    },
+    {
+      "snapshot_at": "2025-08-03 00:00:00+00:00",
+      "rows": 1513,
+      "positives": 71
+    },
+    {
+      "snapshot_at": "2025-08-10 00:00:00+00:00",
+      "rows": 1532,
+      "positives": 81
+    },
+    {
+      "snapshot_at": "2025-08-17 00:00:00+00:00",
+      "rows": 1544,
+      "positives": 71
+    },
+    {
+      "snapshot_at": "2025-08-24 00:00:00+00:00",
+      "rows": 1554,
+      "positives": 75
+    },
+    {
+      "snapshot_at": "2025-08-31 00:00:00+00:00",
+      "rows": 1568,
+      "positives": 76
+    },
+    {
+      "snapshot_at": "2025-09-07 00:00:00+00:00",
+      "rows": 1574,
+      "positives": 78
+    },
+    {
+      "snapshot_at": "2025-09-14 00:00:00+00:00",
+      "rows": 1582,
+      "positives": 79
+    },
+    {
+      "snapshot_at": "2025-09-21 00:00:00+00:00",
+      "rows": 1593,
+      "positives": 87
+    },
+    {
+      "snapshot_at": "2025-09-28 00:00:00+00:00",
+      "rows": 1598,
+      "positives": 83
+    },
+    {
+      "snapshot_at": "2025-10-05 00:00:00+00:00",
+      "rows": 1611,
+      "positives": 86
+    },
+    {
+      "snapshot_at": "2025-10-12 00:00:00+00:00",
+      "rows": 1624,
+      "positives": 91
+    },
+    {
+      "snapshot_at": "2025-10-19 00:00:00+00:00",
+      "rows": 1640,
+      "positives": 94
+    },
+    {
+      "snapshot_at": "2025-10-26 00:00:00+00:00",
+      "rows": 1654,
+      "positives": 100
+    },
+    {
+      "snapshot_at": "2025-11-02 00:00:00+00:00",
+      "rows": 1669,
+      "positives": 99
+    },
+    {
+      "snapshot_at": "2025-11-09 00:00:00+00:00",
+      "rows": 1676,
+      "positives": 91
+    },
+    {
+      "snapshot_at": "2025-11-16 00:00:00+00:00",
+      "rows": 1685,
+      "positives": 93
+    },
+    {
+      "snapshot_at": "2025-11-23 00:00:00+00:00",
+      "rows": 1697,
+      "positives": 87
+    },
+    {
+      "snapshot_at": "2025-11-30 00:00:00+00:00",
+      "rows": 1704,
+      "positives": 84
+    },
+    {
+      "snapshot_at": "2025-12-07 00:00:00+00:00",
+      "rows": 1703,
+      "positives": 78
+    },
+    {
+      "snapshot_at": "2025-12-14 00:00:00+00:00",
+      "rows": 1714,
+      "positives": 79
+    },
+    {
+      "snapshot_at": "2025-12-21 00:00:00+00:00",
+      "rows": 1718,
+      "positives": 90
+    },
+    {
+      "snapshot_at": "2025-12-28 00:00:00+00:00",
+      "rows": 1712,
+      "positives": 88
+    },
+    {
+      "snapshot_at": "2026-01-04 00:00:00+00:00",
+      "rows": 1718,
+      "positives": 90
+    },
+    {
+      "snapshot_at": "2026-01-11 00:00:00+00:00",
+      "rows": 1713,
+      "positives": 90
+    },
+    {
+      "snapshot_at": "2026-01-18 00:00:00+00:00",
+      "rows": 1712,
+      "positives": 94
+    },
+    {
+      "snapshot_at": "2026-01-25 00:00:00+00:00",
+      "rows": 1714,
+      "positives": 93
+    },
+    {
+      "snapshot_at": "2026-02-01 00:00:00+00:00",
+      "rows": 1713,
+      "positives": 97
+    },
+    {
+      "snapshot_at": "2026-02-08 00:00:00+00:00",
+      "rows": 1705,
+      "positives": 94
+    },
+    {
+      "snapshot_at": "2026-02-15 00:00:00+00:00",
+      "rows": 1693,
+      "positives": 79
+    },
+    {
+      "snapshot_at": "2026-02-22 00:00:00+00:00",
+      "rows": 1678,
+      "positives": 73
+    },
+    {
+      "snapshot_at": "2026-03-01 00:00:00+00:00",
+      "rows": 1678,
+      "positives": 79
+    },
+    {
+      "snapshot_at": "2026-03-08 00:00:00+00:00",
+      "rows": 1675,
+      "positives": 73
+    },
+    {
+      "snapshot_at": "2026-03-15 00:00:00+00:00",
+      "rows": 1671,
+      "positives": 78
+    },
+    {
+      "snapshot_at": "2026-03-22 00:00:00+00:00",
+      "rows": 1669,
+      "positives": 69
+    },
+    {
+      "snapshot_at": "2026-03-29 00:00:00+00:00",
+      "rows": 1667,
+      "positives": 69
+    },
+    {
+      "snapshot_at": "2026-04-05 00:00:00+00:00",
+      "rows": 1661,
+      "positives": 62
+    },
+    {
+      "snapshot_at": "2026-04-12 00:00:00+00:00",
+      "rows": 1659,
+      "positives": 61
+    },
+    {
+      "snapshot_at": "2026-04-19 00:00:00+00:00",
+      "rows": 1661,
+      "positives": 60
+    },
+    {
+      "snapshot_at": "2026-04-26 00:00:00+00:00",
+      "rows": 1656,
+      "positives": 55
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "base_value": 0.03917171433568001,
+  "ranking": [
+    {
+      "feature": "tx_count_30d",
+      "mean_abs_shap": 1.0693817354940292
+    },
+    {
+      "feature": "recency_days",
+      "mean_abs_shap": 0.9710181106657473
+    },
+    {
+      "feature": "tx_count_90d",
+      "mean_abs_shap": 0.6219320777379233
+    },
+    {
+      "feature": "tx_count_prev_30d",
+      "mean_abs_shap": 0.28399952358471736
+    },
+    {
+      "feature": "tenure_days",
+      "mean_abs_shap": 0.15662121185491346
+    },
+    {
+      "feature": "frequency_change",
+      "mean_abs_shap": 0.14579922875413612
+    },
+    {
+      "feature": "avg_success_amount_30d",
+      "mean_abs_shap": 0.11486377535848846
+    },
+    {
+      "feature": "avg_success_amount_prev_30d",
+      "mean_abs_shap": 0.09478334997932843
+    },
+    {
+      "feature": "failure_rate_30d",
+      "mean_abs_shap": 0.09055965774588749
+    },
+    {
+      "feature": "failure_rate_change",
+      "mean_abs_shap": 0.08695673202511614
+    },
+    {
+      "feature": "monetary_change",
+      "mean_abs_shap": 0.07531202006762414
+    },
+    {
+      "feature": "failure_rate_prev_30d",
+      "mean_abs_shap": 0.02796038187159057
+    }
+  ]
+}

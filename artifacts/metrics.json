@@ -1,0 +1,257 @@
+{
+  "label_balance": {
+    "purge_gap_days": 63,
+    "splits": {
+      "train": {
+        "start": "2024-09-29 00:00:00+00:00",
+        "end": "2025-08-10 00:00:00+00:00",
+        "weeks": 46,
+        "rows": 55001,
+        "positives": 2258,
+        "positive_rate": 0.041053799021835966
+      },
+      "gap_before_validation": {
+        "start": "2025-08-17 00:00:00+00:00",
+        "end": "2025-10-12 00:00:00+00:00",
+        "weeks": 9,
+        "rows": 14248,
+        "positives": 726,
+        "positive_rate": 0.05095451993262212
+      },
+      "validation": {
+        "start": "2025-10-19 00:00:00+00:00",
+        "end": "2025-12-21 00:00:00+00:00",
+        "weeks": 10,
+        "rows": 16860,
+        "positives": 895,
+        "positive_rate": 0.05308422301304864
+      },
+      "gap_before_test": {
+        "start": "2025-12-28 00:00:00+00:00",
+        "end": "2026-02-22 00:00:00+00:00",
+        "weeks": 9,
+        "rows": 15358,
+        "positives": 798,
+        "positive_rate": 0.05195989061075661
+      },
+      "test": {
+        "start": "2026-03-01 00:00:00+00:00",
+        "end": "2026-04-26 00:00:00+00:00",
+        "weeks": 9,
+        "rows": 14997,
+        "positives": 606,
+        "positive_rate": 0.04040808161632326
+      }
+    }
+  },
+  "test": {
+    "A": {
+      "pr_auc": 0.04040808161632326,
+      "roc_auc": null,
+      "f1": 0.0,
+      "precision": null,
+      "recall": 0.0,
+      "threshold": 0.041053800021835965,
+      "confusion_matrix": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 606,
+        "tn": 14391
+      },
+      "n_rows": 14997,
+      "n_positives": 606
+    },
+    "B": {
+      "pr_auc": 0.24048034137460794,
+      "roc_auc": 0.8513456567670525,
+      "f1": 0.3154796939376104,
+      "precision": 0.24519670631290028,
+      "recall": 0.44224422442244227,
+      "threshold": 0.3,
+      "confusion_matrix": {
+        "tp": 268,
+        "fp": 825,
+        "fn": 338,
+        "tn": 13566
+      },
+      "n_rows": 14997,
+      "n_positives": 606
+    },
+    "C": {
+      "pr_auc": 0.27452694459409643,
+      "roc_auc": 0.8922751614331748,
+      "f1": 0.33296703296703295,
+      "precision": 0.24958813838550248,
+      "recall": 0.5,
+      "threshold": 0.8200000000000001,
+      "confusion_matrix": {
+        "tp": 303,
+        "fp": 911,
+        "fn": 303,
+        "tn": 13480
+      },
+      "n_rows": 14997,
+      "n_positives": 606
+    },
+    "D": {
+      "pr_auc": 0.2887005572902453,
+      "roc_auc": 0.8945226813696587,
+      "f1": 0.34615384615384615,
+      "precision": 0.2722117202268431,
+      "recall": 0.4752475247524752,
+      "threshold": 0.8400000000000001,
+      "confusion_matrix": {
+        "tp": 288,
+        "fp": 770,
+        "fn": 318,
+        "tn": 13621
+      },
+      "n_rows": 14997,
+      "n_positives": 606
+    }
+  },
+  "validation": {
+    "A": {
+      "pr_auc": 0.05308422301304864,
+      "roc_auc": null,
+      "f1": 0.0,
+      "precision": null,
+      "recall": 0.0,
+      "threshold": 0.041053800021835965,
+      "confusion_matrix": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 895,
+        "tn": 15965
+      },
+      "n_rows": 16860,
+      "n_positives": 895
+    },
+    "B": {
+      "pr_auc": 0.3095880256131219,
+      "roc_auc": 0.866620767845864,
+      "f1": 0.39412811387900354,
+      "precision": 0.32742054693274203,
+      "recall": 0.4949720670391061,
+      "threshold": 0.3,
+      "confusion_matrix": {
+        "tp": 443,
+        "fp": 910,
+        "fn": 452,
+        "tn": 15055
+      },
+      "n_rows": 16860,
+      "n_positives": 895
+    },
+    "C": {
+      "pr_auc": 0.370549835526281,
+      "roc_auc": 0.9063653207872668,
+      "f1": 0.4252236898167874,
+      "precision": 0.34366391184573003,
+      "recall": 0.5575418994413408,
+      "threshold": 0.8200000000000001,
+      "confusion_matrix": {
+        "tp": 499,
+        "fp": 953,
+        "fn": 396,
+        "tn": 15012
+      },
+      "n_rows": 16860,
+      "n_positives": 895
+    },
+    "D": {
+      "pr_auc": 0.3785890643362716,
+      "roc_auc": 0.9070063529333545,
+      "f1": 0.43097014925373134,
+      "precision": 0.36989591673338673,
+      "recall": 0.5162011173184358,
+      "threshold": 0.8400000000000001,
+      "confusion_matrix": {
+        "tp": 462,
+        "fp": 787,
+        "fn": 433,
+        "tn": 15178
+      },
+      "n_rows": 16860,
+      "n_positives": 895
+    }
+  },
+  "thresholds": {
+    "A": 0.041053800021835965,
+    "B": 0.3,
+    "C": 0.8200000000000001,
+    "D": 0.8400000000000001
+  },
+  "scale_pos_weight": 23.358281665190432,
+  "selected_hyperparameters": {
+    "C": {
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "n_estimators": 300,
+      "min_child_weight": 1,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "reg_alpha": 0.0,
+      "reg_lambda": 1.0
+    },
+    "D": {
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "n_estimators": 300,
+      "min_child_weight": 1,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "reg_alpha": 0.0,
+      "reg_lambda": 1.0
+    }
+  },
+  "delta_pr_auc_failure_features": 0.014173612696148863,
+  "delta_pr_auc_over_recency": 0.048220215915637354,
+  "quick_mode": false,
+  "bootstrap": {
+    "method": "merchant-grouped percentile bootstrap",
+    "resamples_requested": 2000,
+    "confidence": 0.95,
+    "n_merchants": 1725,
+    "n_rows": 14997,
+    "pr_auc": {
+      "B": {
+        "point": 0.24048034137460794,
+        "ci_low": 0.19128345349012105,
+        "ci_high": 0.2941533706720443,
+        "resamples_used": 2000,
+        "text": "0.240 [0.191, 0.294]"
+      },
+      "C": {
+        "point": 0.27452694459409643,
+        "ci_low": 0.214096627960993,
+        "ci_high": 0.33779582510059236,
+        "resamples_used": 2000,
+        "text": "0.275 [0.214, 0.338]"
+      },
+      "D": {
+        "point": 0.2887005572902453,
+        "ci_low": 0.2267903884426834,
+        "ci_high": 0.3534275449729262,
+        "resamples_used": 2000,
+        "text": "0.289 [0.227, 0.353]"
+      }
+    },
+    "differences": {
+      "D-B": {
+        "point": 0.048220215915637354,
+        "ci_low": -0.000855141974713748,
+        "ci_high": 0.09666585832517671,
+        "resamples_used": 2000,
+        "text": "0.048 [-0.001, 0.097]"
+      },
+      "D-C": {
+        "point": 0.014173612696148863,
+        "ci_low": -0.0018305662348600481,
+        "ci_high": 0.03058807872977442,
+        "resamples_used": 2000,
+        "text": "0.014 [-0.002, 0.031]"
+      }
+    }
+  }
+}

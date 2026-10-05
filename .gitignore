@@ -2,5 +2,13 @@
 .venv/
 .env
 __pycache__/
+
+# Generated data. Reproducible from ml/synthetic/generate.py plus the recorded
+# seed, so there is no reason to version it.
 data/generated/
- data/processed/
+data/processed/
+
+# Large model/SHAP outputs. The small JSON artifacts the report reads are
+# tracked so the document is reproducible from a clone.
+artifacts/*.npz
+artifacts/*.parquet

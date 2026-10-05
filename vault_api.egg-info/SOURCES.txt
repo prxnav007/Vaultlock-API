@@ -10,7 +10,9 @@ app/core/config.py
 app/db/__init__.py
 app/db/base.py
 app/db/session.py
-tests/test_health.py
+app/db/models/__init__.py
+app/tests/__init__.py
+app/tests/test_health.py
 vault_api.egg-info/PKG-INFO
 vault_api.egg-info/SOURCES.txt
 vault_api.egg-info/dependency_links.txt

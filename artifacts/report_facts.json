@@ -1,0 +1,433 @@
+{
+  "merchants": {
+    "value": 2000,
+    "text": "2,000"
+  },
+  "history_range": {
+    "value": [
+      "2024-06-30",
+      "2026-06-30"
+    ],
+    "text": "24 months (2024-06-30 to 2026-06-30)"
+  },
+  "seed": {
+    "value": 42,
+    "text": "42"
+  },
+  "merchant_churn_count": {
+    "value": 295,
+    "text": "295"
+  },
+  "merchant_churn_rate": {
+    "value": 0.1475,
+    "text": "14.8%"
+  },
+  "merchant_churn_combined": {
+    "value": [
+      295,
+      0.1475
+    ],
+    "text": "295 merchants (14.8%)"
+  },
+  "payments_total": {
+    "value": 925805,
+    "text": "925,805"
+  },
+  "failures_total": {
+    "value": 39229,
+    "text": "39,229"
+  },
+  "failure_rate_overall": {
+    "value": 0.04237285389471865,
+    "text": "4.24%"
+  },
+  "failures_combined": {
+    "value": [
+      39229,
+      0.04237285389471865
+    ],
+    "text": "39,229 (4.24% overall failure rate)"
+  },
+  "eligible_rows": {
+    "value": 116464,
+    "text": "116,464"
+  },
+  "snapshot_positives": {
+    "value": 5283,
+    "text": "5,283"
+  },
+  "snapshot_positive_rate": {
+    "value": 0.04536165682099189,
+    "text": "4.54%"
+  },
+  "snapshot_positives_combined": {
+    "value": [
+      5283,
+      0.04536165682099189
+    ],
+    "text": "5,283 positives (4.54%)"
+  },
+  "purge_gap_days": {
+    "value": 63,
+    "text": "9-week"
+  },
+  "train_range": {
+    "value": [
+      "2024-09-29",
+      "2025-08-10"
+    ],
+    "text": "2024-09-29 to 2025-08-10"
+  },
+  "train_weeks": {
+    "value": 46,
+    "text": "46"
+  },
+  "train_rows": {
+    "value": 55001,
+    "text": "55,001"
+  },
+  "train_positives": {
+    "value": 2258,
+    "text": "2,258"
+  },
+  "train_positive_rate": {
+    "value": 0.041053799021835966,
+    "text": "4.11%"
+  },
+  "gap_before_validation_range": {
+    "value": [
+      "2025-08-17",
+      "2025-10-12"
+    ],
+    "text": "2025-08-17 to 2025-10-12"
+  },
+  "gap_before_validation_weeks": {
+    "value": 9,
+    "text": "9"
+  },
+  "gap_before_validation_rows": {
+    "value": 14248,
+    "text": "14,248"
+  },
+  "gap_before_validation_positives": {
+    "value": 726,
+    "text": "726"
+  },
+  "gap_before_validation_positive_rate": {
+    "value": 0.05095451993262212,
+    "text": "5.10%"
+  },
+  "validation_range": {
+    "value": [
+      "2025-10-19",
+      "2025-12-21"
+    ],
+    "text": "2025-10-19 to 2025-12-21"
+  },
+  "validation_weeks": {
+    "value": 10,
+    "text": "10"
+  },
+  "validation_rows": {
+    "value": 16860,
+    "text": "16,860"
+  },
+  "validation_positives": {
+    "value": 895,
+    "text": "895"
+  },
+  "validation_positive_rate": {
+    "value": 0.05308422301304864,
+    "text": "5.31%"
+  },
+  "gap_before_test_range": {
+    "value": [
+      "2025-12-28",
+      "2026-02-22"
+    ],
+    "text": "2025-12-28 to 2026-02-22"
+  },
+  "gap_before_test_weeks": {
+    "value": 9,
+    "text": "9"
+  },
+  "gap_before_test_rows": {
+    "value": 15358,
+    "text": "15,358"
+  },
+  "gap_before_test_positives": {
+    "value": 798,
+    "text": "798"
+  },
+  "gap_before_test_positive_rate": {
+    "value": 0.05195989061075661,
+    "text": "5.20%"
+  },
+  "test_range": {
+    "value": [
+      "2026-03-01",
+      "2026-04-26"
+    ],
+    "text": "2026-03-01 to 2026-04-26"
+  },
+  "test_weeks": {
+    "value": 9,
+    "text": "9"
+  },
+  "test_rows": {
+    "value": 14997,
+    "text": "14,997"
+  },
+  "test_positives": {
+    "value": 606,
+    "text": "606"
+  },
+  "test_positive_rate": {
+    "value": 0.04040808161632326,
+    "text": "4.04%"
+  },
+  "total_rows": {
+    "value": 86858,
+    "text": "86,858"
+  },
+  "total_positives": {
+    "value": 3759,
+    "text": "3,759"
+  },
+  "total_weeks": {
+    "value": 65,
+    "text": "65"
+  },
+  "total_positive_rate": {
+    "value": 0.04327753344539363,
+    "text": "4.33%"
+  },
+  "total_range": {
+    "value": [
+      "2024-09-29",
+      "2026-04-26"
+    ],
+    "text": "2024-09-29 to 2026-04-26"
+  },
+  "last_test_snapshot": {
+    "value": "2026-04-26 00:00:00+00:00",
+    "text": "2026-04-26"
+  },
+  "dataset_end": {
+    "value": "2026-06-30",
+    "text": "2026-06-30"
+  },
+  "a_pr_auc": {
+    "value": 0.04040808161632326,
+    "text": "0.040"
+  },
+  "a_f1": {
+    "value": 0.0,
+    "text": "0.000"
+  },
+  "a_precision": {
+    "value": null,
+    "text": "\u2014"
+  },
+  "a_recall": {
+    "value": 0.0,
+    "text": "0.000"
+  },
+  "a_roc_auc": {
+    "value": null,
+    "text": "\u2014"
+  },
+  "b_pr_auc": {
+    "value": 0.24048034137460794,
+    "text": "0.240"
+  },
+  "b_f1": {
+    "value": 0.3154796939376104,
+    "text": "0.315"
+  },
+  "b_precision": {
+    "value": 0.24519670631290028,
+    "text": "0.245"
+  },
+  "b_recall": {
+    "value": 0.44224422442244227,
+    "text": "0.442"
+  },
+  "b_roc_auc": {
+    "value": 0.8513456567670525,
+    "text": "0.851"
+  },
+  "c_pr_auc": {
+    "value": 0.27452694459409643,
+    "text": "0.275"
+  },
+  "c_f1": {
+    "value": 0.33296703296703295,
+    "text": "0.333"
+  },
+  "c_precision": {
+    "value": 0.24958813838550248,
+    "text": "0.250"
+  },
+  "c_recall": {
+    "value": 0.5,
+    "text": "0.500"
+  },
+  "c_roc_auc": {
+    "value": 0.8922751614331748,
+    "text": "0.892"
+  },
+  "d_pr_auc": {
+    "value": 0.2887005572902453,
+    "text": "0.289"
+  },
+  "d_f1": {
+    "value": 0.34615384615384615,
+    "text": "0.346"
+  },
+  "d_precision": {
+    "value": 0.2722117202268431,
+    "text": "0.272"
+  },
+  "d_recall": {
+    "value": 0.4752475247524752,
+    "text": "0.475"
+  },
+  "d_roc_auc": {
+    "value": 0.8945226813696587,
+    "text": "0.895"
+  },
+  "d_max_depth": {
+    "value": 3,
+    "text": "3"
+  },
+  "d_learning_rate": {
+    "value": 0.05,
+    "text": "0.05"
+  },
+  "d_n_estimators": {
+    "value": 300,
+    "text": "300"
+  },
+  "d_min_child_weight": {
+    "value": 1,
+    "text": "1"
+  },
+  "d_subsample": {
+    "value": 0.8,
+    "text": "0.8"
+  },
+  "d_colsample_bytree": {
+    "value": 0.8,
+    "text": "0.8"
+  },
+  "d_reg_alpha": {
+    "value": 0.0,
+    "text": "0"
+  },
+  "d_reg_lambda": {
+    "value": 1.0,
+    "text": "1"
+  },
+  "d_scale_pos_weight": {
+    "value": 23.358281665190432,
+    "text": "23.36"
+  },
+  "d_threshold": {
+    "value": 0.8400000000000001,
+    "text": "0.84"
+  },
+  "d_risk_band_medium": {
+    "value": 0.8400000000000001,
+    "text": "0.84"
+  },
+  "d_risk_band_high": {
+    "value": 0.9174557328224182,
+    "text": "0.92"
+  },
+  "d_tp": {
+    "value": 288,
+    "text": "288"
+  },
+  "d_fp": {
+    "value": 770,
+    "text": "770"
+  },
+  "d_fn": {
+    "value": 318,
+    "text": "318"
+  },
+  "d_tn": {
+    "value": 13621,
+    "text": "13,621"
+  },
+  "d_flagged_total": {
+    "value": 1058,
+    "text": "1,058"
+  },
+  "test_negatives": {
+    "value": 14391,
+    "text": "14,391"
+  },
+  "delta_pr_auc_failure_features": {
+    "value": 0.014173612696148863,
+    "text": "+0.014"
+  },
+  "delta_pr_auc_over_recency": {
+    "value": 0.048220215915637354,
+    "text": "+0.048"
+  },
+  "base_rate": {
+    "value": 0.04040808161632326,
+    "text": "4.04%"
+  },
+  "accuracy_of_majority": {
+    "value": 0.9595919183836767,
+    "text": "95.96%"
+  },
+  "shap_ranking_csv": {
+    "value": [
+      "tx_count_30d",
+      "recency_days",
+      "tx_count_90d",
+      "tx_count_prev_30d",
+      "tenure_days",
+      "frequency_change",
+      "avg_success_amount_30d",
+      "avg_success_amount_prev_30d",
+      "failure_rate_30d",
+      "failure_rate_change",
+      "monetary_change",
+      "failure_rate_prev_30d"
+    ],
+    "text": "tx_count_30d, recency_days, tx_count_90d, tx_count_prev_30d, tenure_days, frequency_change, avg_success_amount_30d, avg_success_amount_prev_30d, failure_rate_30d, failure_rate_change, monetary_change, failure_rate_prev_30d"
+  },
+  "shap_top_feature": {
+    "value": "tx_count_30d",
+    "text": "tx_count_30d"
+  },
+  "exemplar_high_merchant_id": {
+    "value": "eaf1915f-42fa-4810-8081-931ca52f5738",
+    "text": "eaf1915f-42fa-4810-8081-931ca52f5738"
+  },
+  "exemplar_high_score": {
+    "value": 0.944942057132721,
+    "text": "0.94"
+  },
+  "exemplar_high_snapshot": {
+    "value": "2026-04-26 00:00:00+00:00",
+    "text": "2026-04-26"
+  },
+  "exemplar_low_merchant_id": {
+    "value": "30bfdba0-61c1-4e22-8a19-ef497ad2701a",
+    "text": "30bfdba0-61c1-4e22-8a19-ef497ad2701a"
+  },
+  "exemplar_low_score": {
+    "value": 0.0003905878693331033,
+    "text": "0.00"
+  },
+  "exemplar_low_snapshot": {
+    "value": "2026-04-26 00:00:00+00:00",
+    "text": "2026-04-26"
+  }
+}

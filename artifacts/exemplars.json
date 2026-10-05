@@ -1,0 +1,116 @@
+{
+  "high_risk": {
+    "merchant_id": "eaf1915f-42fa-4810-8081-931ca52f5738",
+    "snapshot_at": "2026-04-26 00:00:00+00:00",
+    "y_true": 1,
+    "score_d": 0.944942057132721,
+    "base_value": 0.03917171433568001,
+    "features": {
+      "recency_days": {
+        "value": 52.62953703703704,
+        "shap": 0.871111273765564
+      },
+      "tx_count_30d": {
+        "value": 0.0,
+        "shap": 0.5448195338249207
+      },
+      "tx_count_prev_30d": {
+        "value": 1.0,
+        "shap": 0.09746279567480087
+      },
+      "tx_count_90d": {
+        "value": 1.0,
+        "shap": 0.8090022206306458
+      },
+      "frequency_change": {
+        "value": -1.0,
+        "shap": -0.015291104093194008
+      },
+      "avg_success_amount_30d": {
+        "value": null,
+        "shap": 0.045397982001304626
+      },
+      "avg_success_amount_prev_30d": {
+        "value": 1140.0,
+        "shap": 0.29492685198783875
+      },
+      "monetary_change": {
+        "value": null,
+        "shap": -0.00929105095565319
+      },
+      "failure_rate_30d": {
+        "value": null,
+        "shap": 0.07811678946018219
+      },
+      "failure_rate_prev_30d": {
+        "value": 0.0,
+        "shap": -0.01897427812218666
+      },
+      "failure_rate_change": {
+        "value": null,
+        "shap": 0.09547059237957001
+      },
+      "tenure_days": {
+        "value": 233.0,
+        "shap": 0.010814557783305645
+      }
+    }
+  },
+  "low_risk": {
+    "merchant_id": "30bfdba0-61c1-4e22-8a19-ef497ad2701a",
+    "snapshot_at": "2026-04-26 00:00:00+00:00",
+    "y_true": 0,
+    "score_d": 0.0003905878693331033,
+    "base_value": 0.03917171433568001,
+    "features": {
+      "recency_days": {
+        "value": 0.09807870370370371,
+        "shap": -2.6091837882995605
+      },
+      "tx_count_30d": {
+        "value": 68.0,
+        "shap": -2.5989606380462646
+      },
+      "tx_count_prev_30d": {
+        "value": 46.0,
+        "shap": -0.7445777058601379
+      },
+      "tx_count_90d": {
+        "value": 149.0,
+        "shap": -0.823491096496582
+      },
+      "frequency_change": {
+        "value": 22.0,
+        "shap": -0.12367120385169983
+      },
+      "avg_success_amount_30d": {
+        "value": 7693.15625,
+        "shap": -0.3442211151123047
+      },
+      "avg_success_amount_prev_30d": {
+        "value": 7755.833333333333,
+        "shap": -0.19446757435798645
+      },
+      "monetary_change": {
+        "value": -62.67708333333303,
+        "shap": -0.08191727846860886
+      },
+      "failure_rate_30d": {
+        "value": 0.058823529411764705,
+        "shap": -0.041639573872089386
+      },
+      "failure_rate_prev_30d": {
+        "value": 0.08695652173913043,
+        "shap": -0.013466529548168182
+      },
+      "failure_rate_change": {
+        "value": -0.028132992327365727,
+        "shap": -0.07884732633829117
+      },
+      "tenure_days": {
+        "value": 245.0,
+        "shap": -0.23219209909439087
+      }
+    }
+  }
+}

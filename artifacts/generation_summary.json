@@ -1,0 +1,33 @@
+{
+  "seed": 42,
+  "n_merchants": 2000,
+  "history_start": "2024-06-30",
+  "history_end": "2026-06-30",
+  "months": 24,
+  "merchant_churn_count": 295,
+  "merchant_churn_rate": 0.1475,
+  "payments_total": 925805,
+  "failures_total": 39229,
+  "failure_rate_overall": 0.04237285389471865,
+  "snapshot_cadence_days": 7,
+  "observation_window_days": 90,
+  "prediction_horizon_days": 60,
+  "churn_mode_counts": {
+    "gradual": 147,
+    "abrupt": 89,
+    "straggler": 59
+  },
+  "config": {
+    "n_merchants": 2000,
+    "months": 24,
+    "seed": 42,
+    "churn_fraction": 0.15,
+    "rate_log_mu": -1.2,
+    "rate_log_sigma": 1.5,
+    "amount_log_mu": 8.6,
+    "amount_log_sigma": 1.1,
+    "failure_beta_a": 2.0,
+    "failure_beta_b": 48.0,
+    "activity_cv": 0.6
+  }
+}
