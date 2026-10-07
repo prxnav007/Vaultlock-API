@@ -126,6 +126,12 @@ async def churn_risk(
 
     if as_of is None:
         as_of = await latest_ledger_time(session) or datetime.now(UTC)
+    if as_of.tzinfo is None:
+        # A bare `?as_of=2026-04-26` parses to a naive datetime, and astimezone
+        # would read it as server-local time -- so the same query would pick a
+        # different snapshot on a machine in a different timezone. The ledger is
+        # stored in UTC, so a caller who omitted an offset meant UTC.
+        as_of = as_of.replace(tzinfo=UTC)
     as_of = as_of.astimezone(UTC).replace(microsecond=0)
 
     history = await load_history(session, merchant, as_of)

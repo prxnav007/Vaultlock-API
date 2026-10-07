@@ -12,6 +12,89 @@ In a distributed payment system, the same logical operation may arrive multiple 
 
 ---
 
+## Running the churn dashboard
+
+The demo surface is `GET /dashboard`: pick a merchant, get a churn score, a risk
+band and the factors behind it. Scores are derived server-side from the payment
+ledger — the browser sends only a merchant id.
+
+### Already set up
+
+```sh
+docker compose up -d              # or start your local PostgreSQL service
+.venv/bin/uvicorn app.main:app --port 8000
+```
+
+Then open <http://localhost:8000/dashboard> and choose from the example
+merchants. `python scripts/demo_urls.py` prints deep links for the exemplars.
+
+### First-time setup on a new machine
+
+The trained model (`artifacts/xgboost_model.json` and `model_metadata.json`) is
+committed, so there is nothing to retrain. The payment ledger is not — it lives
+in PostgreSQL and `data/` is gitignored — so it has to be regenerated once. It
+is reproducible: merchant ids are drawn from the seeded stream, so seed 42
+rebuilds the identical ledger, ids included.
+
+**1. PostgreSQL 16.** Either `docker compose up -d`, or a native install:
+
+```powershell
+winget install PostgreSQL.PostgreSQL.16          # Windows
+psql -U postgres -c "CREATE ROLE vault LOGIN PASSWORD 'vault';"
+psql -U postgres -c "CREATE DATABASE vault OWNER vault;"
+```
+```sh
+sudo apt install postgresql-16                    # Debian/Ubuntu
+sudo pacman -S postgresql                         # Arch
+brew install postgresql@16                        # macOS
+```
+
+**2. Python environment.**
+
+```powershell
+py -3.12 -m venv .venv ; .venv\Scripts\activate   # Windows
+```
+```sh
+python3.12 -m venv .venv && source .venv/bin/activate
+```
+
+**3. Dependencies.** The serving path needs only numpy and xgboost; generation
+adds pandas and pyarrow. This deliberately skips scikit-learn and shap, which
+are needed only to retrain:
+
+```sh
+pip install -e ".[api]" pandas pyarrow
+```
+
+**4. `.env`** — gitignored, so it does **not** arrive with `git clone`. Copy
+`.env.example` to `.env` and set `POSTGRES_USER`, `POSTGRES_PASSWORD`,
+`POSTGRES_DB`, `POSTGRES_HOST`, `POSTGRES_PORT`. Without it `Settings()` fails
+at import time and even `alembic` will not start.
+
+**5. Schema.** Migrations are not applied automatically:
+
+```sh
+alembic upgrade head
+```
+
+**6. Ledger** (~60 s; 2,000 merchants and 925,805 payments):
+
+```sh
+python scripts/run_pipeline.py --stage generate
+```
+
+Use the pipeline wrapper rather than calling `ml/synthetic/generate.py`
+directly — the wrapper pins `--end-date 2026-06-30`, which is the ledger the
+committed model was trained against. `generate.py` on its own defaults to
+*today* and would produce a different dataset.
+
+**7. Verify.** `python scripts/demo_urls.py` must print
+`eaf1915f-42fa-4810-8081-931ca52f5738` as the high-risk exemplar, and the
+dashboard must score it 0.945 / HIGH. A different score means the ledger was
+generated with the wrong end date — re-run step 6.
+
+---
+
 ## What the project builds
 
 The project has two connected layers.

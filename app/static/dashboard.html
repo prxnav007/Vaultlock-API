@@ -22,6 +22,14 @@
   form { display: flex; gap: .5rem; margin-bottom: .6rem; flex-wrap: wrap; }
   .narrow { flex: 0 1 15rem; }
   .note { margin: 0 0 1.5rem; }
+  .pick-label { display: block; font-size: .74rem; text-transform: uppercase;
+                letter-spacing: .09em; color: var(--faint); font-weight: 600;
+                margin-bottom: .35rem; }
+  select {
+    width: 100%; padding: .6rem .7rem; border: 1px solid var(--line);
+    border-radius: 6px; font: inherit; font-size: .88rem; margin-bottom: .8rem;
+    background: var(--card); color: var(--ink);
+  }
   input {
     flex: 1; padding: .6rem .7rem; border: 1px solid var(--line);
     border-radius: 6px; font: inherit; font-family: ui-monospace, monospace;
@@ -48,7 +56,7 @@
   .verdict { color: var(--muted); font-size: .9rem; }
   .meter { height: 6px; background: var(--line); border-radius: 3px; margin-top: 1rem; position: relative; }
   .meter-fill { height: 100%; border-radius: 3px; background: var(--ink); }
-  .meter-mark { position: absolute; top: -4px; width: 2px; height: 14px; background: var(--faint); }
+  .meter-mark { position: absolute; top: -5px; width: 2px; height: 16px; background: var(--high); }
   .meter-labels { display: flex; justify-content: space-between; font-size: .7rem; color: var(--faint); margin-top: .35rem; }
   h2 { font-size: .74rem; text-transform: uppercase; letter-spacing: .09em;
        color: var(--faint); margin: 0 0 .75rem; font-weight: 600; }
@@ -85,10 +93,15 @@
     features.
   </p>
 
+  <label class="pick-label" for="preset">Example merchants</label>
+  <select id="preset">
+    <option value="">Choose a merchant…</option>
+  </select>
+
   <form id="lookup">
     <input id="merchant" name="merchant" placeholder="merchant UUID"
            autocomplete="off" spellcheck="false" required>
-    <input id="as-of" name="as-of" placeholder="as of (optional, e.g. 2026-04-26)"
+    <input id="as-of" name="as-of" placeholder="as of (optional, e.g. 2026-04-26T00:00:00Z)"
            autocomplete="off" spellcheck="false" class="narrow">
     <button type="submit">Score</button>
   </form>
@@ -137,6 +150,49 @@ const DIRECTION_LABEL = {
   decreases_risk: "lowers risk",
 };
 const ARROW = { increases_risk: "▲", decreases_risk: "▼" };
+
+// The frozen decision threshold, drawn on the meter so a score can be read
+// against the line that turns it into a decision. Mirrors
+// artifacts/model_metadata.json -> classification_threshold; update both if the
+// model is ever retrained.
+const THRESHOLD = 0.84;
+
+// A fixed cast for the demo, so no UUID has to be typed and the interesting
+// cases -- including the ones the model gets wrong -- are one click away.
+// Merchant ids are reproducible: ml/synthetic/generate.py draws them from the
+// seeded stream, so seed 42 rebuilds this exact ledger on any machine.
+// Scores below are Model D on the final test snapshot.
+const AS_OF = "2026-04-26T00:00:00Z";
+const PRESETS = [
+  { label: "Abrupt churner — caught (0.945 HIGH, did churn)",
+    merchant: "eaf1915f-42fa-4810-8081-931ca52f5738", asOf: AS_OF },
+  { label: "Gradual churner — borderline (0.903 MEDIUM, did churn)",
+    merchant: "f2afe4b2-7b26-474c-baef-fdf36d5e5d00", asOf: AS_OF },
+  { label: "Flagged but stayed — false positive (0.940 HIGH)",
+    merchant: "44619b6e-636b-49a7-8409-cf8c136a3c0e", asOf: AS_OF },
+  { label: "Missed — false negative just under 0.84 (0.839 LOW, did churn)",
+    merchant: "9307c168-ed54-478e-b671-4d1f58ca400a", asOf: AS_OF },
+  { label: "Healthy high-volume merchant (0.000 LOW, stayed)",
+    merchant: "30bfdba0-61c1-4e22-8a19-ef497ad2701a", asOf: AS_OF },
+  { label: "Refused — same churner scored at the end of the ledger",
+    merchant: "eaf1915f-42fa-4810-8081-931ca52f5738", asOf: "" },
+];
+
+const presetSelect = $("preset");
+presetSelect.append(...PRESETS.map((preset, index) => {
+  const option = document.createElement("option");
+  option.value = String(index);
+  option.textContent = preset.label;
+  return option;
+}));
+
+presetSelect.addEventListener("change", () => {
+  const preset = PRESETS[Number(presetSelect.value)];
+  if (!preset) return;
+  $("merchant").value = preset.merchant;
+  $("as-of").value = preset.asOf;
+  form.requestSubmit();
+});
 
 // The refusals are distinct situations and the wording has to say which.
 const REASON_TEXT = {
@@ -210,6 +266,8 @@ async function score(merchantId, asOf) {
     ? "predicted to stop transacting in the next 60 days"
     : "predicted to keep transacting";
   $("meter-fill").style.width = `${Math.round(data.churn_score * 100)}%`;
+  $("meter-mark").style.left = `${THRESHOLD * 100}%`;
+  $("meter-mark").title = `decision threshold ${THRESHOLD}`;
   renderFactors(data.top_factors);
 
   const merchant = await fetch(`/merchants/${merchantId}`);
